@@ -29,7 +29,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     TelegramWebApp tg = TelegramWebApp.instance;
-
+    var user = tg.initData.user;
+    DateTime date =
+        DateTime.fromMillisecondsSinceEpoch(tg.initData.authDate * 1000);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -43,7 +45,16 @@ class _MyHomePageState extends State<MyHomePage> {
               'Открыт из телеграмма? ${tg.isSupported}',
             ),
             Text(
-              'Data: ${tg.initData}, unsafe data: ${tg.initDataUnsafe?.toReadableString()}',
+              'Your name: ${user.firstname}',
+            ),
+            Text(
+              'Your nick: ${user.username}',
+            ),
+            Text(
+              'Your id: ${user.id}',
+            ),
+            Text(
+              'Your auth date: $date',
             ),
           ],
         ),
