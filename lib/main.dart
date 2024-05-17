@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Открыт из телеграмма? ${tg.isSupported}',
+              'Открыт из интернетов? ${tg.isSupported}',
             ),
             Text(
               'Data ${''}',
