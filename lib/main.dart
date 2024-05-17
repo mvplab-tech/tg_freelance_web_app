@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:telegram_web_app/telegram_web_app.dart';
-// import 'package:flutter_telegram_web_app/flutter_telegram_web_app.dart' as tg;
 
 void main() {
   runApp(const MyApp());
