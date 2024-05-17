@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'Открыт из интернетов? ${tg.isSupported}',
             ),
             Text(
-              'Data ${''}',
+              'Data ${tg.initData}',
             ),
           ],
         ),
