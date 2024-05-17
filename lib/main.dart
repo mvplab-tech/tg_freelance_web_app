@@ -40,10 +40,10 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Открыт из интернетов? ${tg.isSupported}',
+              'Открыт из телеграмма? ${tg.isSupported}',
             ),
             Text(
-              'Data ${tg.initData}',
+              'Data: ${tg.initData}, unsafe data: ${tg.initDataUnsafe?.toReadableString()}',
             ),
           ],
         ),
