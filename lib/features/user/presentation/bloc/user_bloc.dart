@@ -54,15 +54,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       navigationService.config.pushReplacement(AppRoutes.projects.path);
     } else {
       String userName = '${tgUser.firstname} ${tgUser.lastname}'.trim();
-
-      // final freshUser = await directus.createOne(
-      //   collection: DirectusCollections.usersCollection,
-      //   data: {
-      //     'tgId': tgUser.id,
-      //     'userName': userName,
-      //     'description': {},
-      //   },
-      // );
       emit(
         state.copyWith(
           authorizedUser: UserEntity(
@@ -100,5 +91,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             portfolioUrl: ''),
       ),
     );
+    navigationService.config.pushReplacement(AppRoutes.projects.path);
   }
 }
