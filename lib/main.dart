@@ -1,63 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:telegram_web_app/telegram_web_app.dart';
+import 'package:tg_freelance/app.dart';
+import 'package:tg_freelance/core/constants/tg_consts.dart';
+import 'package:tg_freelance/core/di/injectable.dart';
+import 'package:tg_freelance/core/services/directus/directus_service_impl.dart';
+import 'package:tg_freelance/features/user/presentation/bloc/user_bloc.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await configureDependencies();
+  await directus.initDirectus();
+  tg.expand();
+  usePathUrlStrategy();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  // TelegramWebAppFake fk = TelegramWebAppFake();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: TelegramThemeUtil.getTheme(TelegramWebApp.instance),
-      home: const MyHomePage(title: 'Freelancers go nuttts!!'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    TelegramWebApp tg = TelegramWebApp.instance;
-    var user = tg.initData.user;
-    DateTime date =
-        DateTime.fromMillisecondsSinceEpoch(tg.initData.authDate * 1000);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Открыт из телеграмма? ${tg.isSupported}',
-            ),
-            Text(
-              'Your name: ${user.firstname}',
-            ),
-            Text(
-              'Your nick: ${user.username}',
-            ),
-            Text(
-              'Your id: ${user.id}',
-            ),
-            Text(
-              'Your auth date: $date',
-            ),
-          ],
-        ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => getIt<UserBloc>()),
+      ],
+      child: Pulse(
+        theme: TelegramThemeUtil.getTheme(TelegramWebApp.instance.isSupported
+            ? TelegramWebApp.instance
+            : TelegramWebAppFake())!,
       ),
     );
   }
