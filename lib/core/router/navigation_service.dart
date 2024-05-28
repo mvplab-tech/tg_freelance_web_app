@@ -7,6 +7,7 @@ import 'package:tg_freelance/core/router/navigator_key_provider.dart';
 import 'package:tg_freelance/features/projects/presentation/pages/projects_page.dart';
 import 'package:tg_freelance/features/splash_screen.dart';
 import 'package:tg_freelance/features/user/presentation/pages/create_account_page.dart';
+import 'package:tg_freelance/features/user/presentation/pages/edit_profile.dart';
 
 final navigationService = getIt<NavigationService>();
 
@@ -44,6 +45,11 @@ class NavigationService {
           name: AppRoutes.splash.name,
           path: AppRoutes.splash.path,
           builder: (_, __) => const SplashScreen(),
+        ),
+        GoRoute(
+          name: AppRoutes.profile.name,
+          path: AppRoutes.profile.path,
+          builder: (_, __) => const EditProfile(),
         ),
       ],
     );

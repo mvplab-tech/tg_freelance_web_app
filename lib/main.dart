@@ -28,9 +28,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => getIt<UserBloc>()),
       ],
       child: Pulse(
-        theme: TelegramThemeUtil.getTheme(TelegramWebApp.instance.isSupported
-            ? TelegramWebApp.instance
-            : TelegramWebAppFake())!,
+        theme: TelegramThemeUtil.getTheme(
+          TelegramWebApp.instance.isSupported
+              ? TelegramWebApp.instance
+              : TelegramWebAppFake(),
+        )!,
       ),
     );
   }
