@@ -46,7 +46,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         },
       ),
     );
-    log(existingUser.first.toString());
     if (existingUser.isNotEmpty) {
       UserEntity user = UserEntity.fromMap(existingUser.first);
       emit(state.copyWith(authorizedUser: user));
