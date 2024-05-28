@@ -13,6 +13,7 @@ void main() async {
   await configureDependencies();
   await directus.initDirectus();
   tg.expand();
+
   usePathUrlStrategy();
   runApp(const MyApp());
 }
