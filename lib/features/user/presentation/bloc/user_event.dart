@@ -15,3 +15,14 @@ class UserCreateNewUser extends UserEvent {
     required this.name,
   });
 }
+
+class UserUpdateData extends UserEvent {
+  final FreelancerProfile freelancer;
+  final ClientProfile client;
+  final String? updName;
+  UserUpdateData({
+    required this.freelancer,
+    required this.client,
+    this.updName,
+  });
+}

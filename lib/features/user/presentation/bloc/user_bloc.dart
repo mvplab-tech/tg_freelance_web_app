@@ -19,12 +19,10 @@ part 'user_event.dart';
 
 final userbloc = getIt<UserBloc>();
 final unauthorized = UserEntity(
-    dirId: 0,
-    tgId: 0,
-    userName: '',
-    occupation: '',
-    skills: '',
-    portfolioUrl: '');
+  dirId: 0,
+  tgId: 0,
+  userName: '',
+);
 
 @Singleton()
 class UserBloc extends Bloc<UserEvent, UserState> {
@@ -34,6 +32,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         ) {
     on<UserInitEvent>(_userInit);
     on<UserCreateNewUser>(_createNewUser);
+    on<UserUpdateData>(_updateUser);
   }
 
   FutureOr<void> _userInit(UserInitEvent event, Emitter<UserState> emit) async {
@@ -47,7 +46,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         },
       ),
     );
-
+    log(existingUser.first.toString());
     if (existingUser.isNotEmpty) {
       UserEntity user = UserEntity.fromMap(existingUser.first);
       emit(state.copyWith(authorizedUser: user));
@@ -60,9 +59,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             dirId: 0,
             tgId: tgUser.id,
             userName: userName,
-            occupation: '',
-            skills: 'skills',
-            portfolioUrl: 'portfolioUrl',
           ),
         ),
       );
@@ -77,20 +73,44 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       data: {
         'tgId': state.authorizedUser.tgId,
         'userName': event.name,
-        'description': {},
       },
     );
     emit(
       state.copyWith(
         authorizedUser: UserEntity(
-            dirId: freshUser['id'],
-            tgId: state.authorizedUser.tgId,
-            userName: event.name,
-            occupation: '',
-            skills: '',
-            portfolioUrl: ''),
+          dirId: freshUser['id'],
+          tgId: state.authorizedUser.tgId,
+          userName: event.name,
+        ),
       ),
     );
     navigationService.config.pushReplacement(AppRoutes.projects.path);
+  }
+
+  FutureOr<void> _updateUser(
+      UserUpdateData event, Emitter<UserState> emit) async {
+    emit(state.copyWith(status: Status.loading));
+    UserEntity user = state.authorizedUser;
+    UserEntity upd = user.copyWith(
+        freelancerProfile: event.freelancer, clientProfile: event.client);
+    try {
+      final res = await directus.updateOne(
+          collection: DirectusCollections.usersCollection,
+          itemId: user.dirId.toString(),
+          updateData: {
+            'userName': event.updName,
+            'aboutMeFreelancer': event.freelancer.aboutMeFreelancer,
+            'aboutMeClient': event.client.aboutMeClient,
+            'occupation': event.freelancer.occupation.name,
+            'expertiseLevel': event.freelancer.expertiseLevel.name,
+            'skills': event.freelancer.skills
+          });
+      log(res.toString());
+    } on DirectusError catch (e) {
+      log(e.message.toString());
+      log(e.additionalInfo.toString());
+    }
+
+    emit(state.copyWith(authorizedUser: upd, status: Status.success));
   }
 }
