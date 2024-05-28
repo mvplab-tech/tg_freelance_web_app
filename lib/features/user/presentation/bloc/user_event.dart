@@ -17,8 +17,8 @@ class UserCreateNewUser extends UserEvent {
 }
 
 class UserUpdateData extends UserEvent {
-  final FreelancerProfile freelancer;
-  final ClientProfile client;
+  final FreelancerProfile? freelancer;
+  final ClientProfile? client;
   final String? updName;
   UserUpdateData({
     required this.freelancer,

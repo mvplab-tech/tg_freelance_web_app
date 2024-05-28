@@ -15,4 +15,8 @@ sealed class UserState with _$UserState {
 
 extension UserStateX on UserState {
   bool get isAuthorized => authorizedUser.tgId != 0;
+  bool get isFreelancerFilled => authorizedUser.freelancerProfile != null;
+  bool get isClientFilled =>
+      authorizedUser.clientProfile != null &&
+      authorizedUser.clientProfile!.aboutMeClient.isNotEmpty;
 }

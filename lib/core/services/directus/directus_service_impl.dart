@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:dio/dio.dart';
 import 'package:directus/directus.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tg_freelance/core/di/injectable.dart';

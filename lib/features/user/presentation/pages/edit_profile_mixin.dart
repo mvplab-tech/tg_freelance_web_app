@@ -13,10 +13,11 @@ mixin EditProfileMixin on State<EditProfile> {
   @override
   void initState() {
     nameController = TextEditingController();
-    aboutClientController =
-        TextEditingController(text: user.clientProfile?.aboutMeClient);
-    aboutFreelancerController =
-        TextEditingController(text: user.freelancerProfile?.aboutMeFreelancer);
+    aboutClientController = TextEditingController()
+      ..addListener(() {
+        setState(() {});
+      });
+    aboutFreelancerController = TextEditingController();
     super.initState();
   }
 
@@ -34,6 +35,14 @@ mixin EditProfileMixin on State<EditProfile> {
             user.freelancerProfile?.expertiseLevel != null)) {
       setState(() {
         isButtonAvailable = true;
+      });
+    } else if (aboutClientController.text.isNotEmpty) {
+      setState(() {
+        isButtonAvailable = true;
+      });
+    } else {
+      setState(() {
+        isButtonAvailable = false;
       });
     }
   }
@@ -83,17 +92,21 @@ mixin EditProfileMixin on State<EditProfile> {
   void buttonAction() {
     userbloc.add(
       UserUpdateData(
-        updName:
-            nameController.text.isNotEmpty ? nameController.text.trim() : null,
-        freelancer: FreelancerProfile(
-          aboutMeFreelancer: nameController.text.isNotEmpty
-              ? aboutFreelancerController.text.trim()
-              : user.freelancerProfile?.aboutMeFreelancer ?? '',
-          occupation: profession ?? user.freelancerProfile!.occupation,
-          expertiseLevel:
-              expertiseLevel ?? user.freelancerProfile!.expertiseLevel,
-          skills: skills.isNotEmpty ? skills : user.freelancerProfile!.skills,
-        ),
+        updName: nameController.text.isNotEmpty
+            ? nameController.text.trim()
+            : user.userName,
+        freelancer: profession != null && expertiseLevel != null
+            ? FreelancerProfile(
+                aboutMeFreelancer: nameController.text.isNotEmpty
+                    ? aboutFreelancerController.text.trim()
+                    : user.freelancerProfile?.aboutMeFreelancer ?? '',
+                occupation: profession ?? user.freelancerProfile!.occupation,
+                expertiseLevel:
+                    expertiseLevel ?? user.freelancerProfile!.expertiseLevel,
+                skills:
+                    skills.isNotEmpty ? skills : user.freelancerProfile!.skills,
+              )
+            : null,
         client: ClientProfile(
           aboutMeClient: aboutClientController.text.isNotEmpty
               ? aboutClientController.text.trim()

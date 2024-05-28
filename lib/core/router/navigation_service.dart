@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:tg_freelance/core/di/injectable.dart';
 import 'package:tg_freelance/core/router/app_routes.dart';
 import 'package:tg_freelance/core/router/navigator_key_provider.dart';
+import 'package:tg_freelance/features/projects/presentation/pages/new_project_page.dart';
 import 'package:tg_freelance/features/projects/presentation/pages/projects_page.dart';
 import 'package:tg_freelance/features/splash_screen.dart';
 import 'package:tg_freelance/features/user/presentation/pages/create_account_page.dart';
@@ -50,6 +51,11 @@ class NavigationService {
           name: AppRoutes.profile.name,
           path: AppRoutes.profile.path,
           builder: (_, __) => const EditProfile(),
+        ),
+        GoRoute(
+          name: AppRoutes.createProject.name,
+          path: AppRoutes.createProject.path,
+          builder: (_, __) => const CreateProject(),
         ),
       ],
     );

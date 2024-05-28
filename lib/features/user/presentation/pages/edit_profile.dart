@@ -186,14 +186,6 @@ class __FreelanceTabState extends State<_FreelanceTab> {
               expandedInsets: const EdgeInsets.all(0),
               initialSelection: profession?.name,
               menuHeight: 300,
-              // inputDecorationTheme: InputDecorationTheme(
-              //   border: OutlineInputBorder(
-              //     borderSide: BorderSide(
-              //       color:
-              //           widget.isError ? Colors.red : const Color(0xFF000000),
-              //     ),
-              //   ),
-              // ),
               onSelected: (value) {
                 setState(() {
                   profession = ProjectType.values.byName(value as String);
@@ -285,9 +277,12 @@ class __FreelanceTabState extends State<_FreelanceTab> {
             SizedBox(
               height: 300,
               child: TextField(
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Few words about you...'),
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: fr == null
+                      ? 'Few words about you...'
+                      : fr!.aboutMeFreelancer,
+                ),
                 maxLines: 4,
                 maxLength: 500,
                 controller: widget.aboutController,
@@ -312,16 +307,7 @@ class _ClientTab extends StatefulWidget {
 }
 
 class __ClientTabState extends State<_ClientTab> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
+  ClientProfile? client = userbloc.state.authorizedUser.clientProfile;
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -340,9 +326,11 @@ class __ClientTabState extends State<_ClientTab> {
         SizedBox(
           height: 300,
           child: TextField(
-            decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Few words about you...'),
+            decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                hintText: client == null
+                    ? 'Few words about you...'
+                    : client!.aboutMeClient),
             maxLines: 4,
             maxLength: 500,
             controller: widget.aboutController,

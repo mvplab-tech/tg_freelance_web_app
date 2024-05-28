@@ -32,7 +32,9 @@ class _ProjectsPageState extends State<ProjectsPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          context.push(AppRoutes.createProject.path);
+        },
         child: Text(
           '+',
           style: context.styles.header2,

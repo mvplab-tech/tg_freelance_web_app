@@ -98,11 +98,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           itemId: user.dirId.toString(),
           updateData: {
             'userName': event.updName,
-            'aboutMeFreelancer': event.freelancer.aboutMeFreelancer,
-            'aboutMeClient': event.client.aboutMeClient,
-            'occupation': event.freelancer.occupation.name,
-            'expertiseLevel': event.freelancer.expertiseLevel.name,
-            'skills': event.freelancer.skills
+            'aboutMeFreelancer': event.freelancer?.aboutMeFreelancer,
+            'aboutMeClient': event.client?.aboutMeClient,
+            'occupation': event.freelancer?.occupation.name,
+            'expertiseLevel': event.freelancer?.expertiseLevel.name,
+            'skills': event.freelancer?.skills
           });
       log(res.toString());
     } on DirectusError catch (e) {
