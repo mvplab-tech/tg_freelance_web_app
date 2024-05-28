@@ -50,7 +50,10 @@ class UserEntity {
       dirId: map['id'] as int,
       tgId: map['tgId'] as int,
       userName: map['userName'] as String,
-      freelancerProfile: FreelancerProfile.fromMap(map),
+      freelancerProfile:
+          map['occupation'] != null && map['expertiseLevel'] != null
+              ? FreelancerProfile.fromMap(map)
+              : null,
       clientProfile: ClientProfile.fromMap(map),
     );
   }
@@ -124,7 +127,7 @@ class FreelancerProfile {
 
   factory FreelancerProfile.fromMap(Map<String, dynamic> map) {
     return FreelancerProfile(
-      aboutMeFreelancer: map['aboutMeFreelancer'] as String,
+      aboutMeFreelancer: map['aboutMeFreelancer'] ?? '',
       occupation: ProjectType.values.byName(map['occupation']),
       expertiseLevel: ExpertiseLevel.values.byName(map['expertiseLevel']),
       skills: List<String>.from((map['skills'])),

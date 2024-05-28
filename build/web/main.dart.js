@@ -90931,38 +90931,37 @@ return b.a===this.a},
 gC(a){return B.c.gC(this.a)}}
 A.jc.prototype={
 yV(a,b){return this.aiS(a,b)},
-aiS(a,b){var s=0,r=A.O(t.H),q=this,p,o,n,m,l,k,j,i,h,g,f,e,d
-var $async$yV=A.P(function(c,a0){if(c===1)return A.L(a0,r)
-while(true)switch(s){case 0:e=a.a
-d=e.gXm(e).a
-e=d.a
+aiS(a,b){var s=0,r=A.O(t.H),q=this,p,o,n,m,l,k,j,i,h,g,f
+var $async$yV=A.P(function(c,d){if(c===1)return A.L(d,r)
+while(true)switch(s){case 0:g=a.a
+f=g.gXm(g).a
+g=f.a
 p=t.N
 o=t.X
 s=2
-return A.K($.a_n().Bz("users",new A.a52(A.au(["tgId",new A.Kr(e)],p,o))),$async$yV)
-case 2:n=a0
+return A.K($.a_n().Bz("users",new A.a52(A.au(["tgId",new A.Kr(g)],p,o))),$async$yV)
+case 2:n=d
 m=J.at(n)
-if(m.gbC(n)){e=m.gM(n)
-m=J.at(e)
-l=A.cx(m.i(e,"id"))
-k=A.cx(m.i(e,"tgId"))
-j=A.bs(m.i(e,"userName"))
-i=A.bs(m.i(e,"aboutMeFreelancer"))
-h=A.Kh(B.jI,m.i(e,"occupation"))
-g=A.Kh(B.jK,m.i(e,"expertiseLevel"))
-p=A.i6(m.i(e,"skills"),!0,p)
-e=m.i(e,"aboutMeClient")
-if(e==null)e=""
-e=q.c.HJ(new A.nL(l,k,j,new A.KG(i,h,g,p),new A.J2(e)))
-if(!b.d)b.a.$1(e)
-e=$.a_o().a
-e===$&&A.a()
-e.Ko("/projects",o)}else{f=B.c.h8(d.b+" "+d.c)
-e=q.c.HJ(new A.nL(0,e,f,null,null))
-if(!b.d)b.a.$1(e)
-e=$.a_o().a
-e===$&&A.a()
-e.Ko("/createAccount",o)}return A.M(null,r)}})
+if(m.gbC(n)){g=m.gM(n)
+m=J.at(g)
+l=A.cx(m.i(g,"id"))
+k=A.cx(m.i(g,"tgId"))
+j=A.bs(m.i(g,"userName"))
+if(m.i(g,"occupation")!=null&&m.i(g,"expertiseLevel")!=null){i=m.i(g,"aboutMeFreelancer")
+if(i==null)i=""
+p=new A.KG(i,A.Kh(B.jI,m.i(g,"occupation")),A.Kh(B.jK,m.i(g,"expertiseLevel")),A.i6(m.i(g,"skills"),!0,p))}else p=null
+g=m.i(g,"aboutMeClient")
+if(g==null)g=""
+g=q.c.HJ(new A.nL(l,k,j,p,new A.J2(g)))
+if(!b.d)b.a.$1(g)
+g=$.a_o().a
+g===$&&A.a()
+g.Ko("/projects",o)}else{h=B.c.h8(f.b+" "+f.c)
+g=q.c.HJ(new A.nL(0,g,h,null,null))
+if(!b.d)b.a.$1(g)
+g=$.a_o().a
+g===$&&A.a()
+g.Ko("/createAccount",o)}return A.M(null,r)}})
 return A.N($async$yV,r)},
 xk(a,b){return this.a7w(a,b)},
 a7w(a,b){var s=0,r=A.O(t.H),q=this,p,o
