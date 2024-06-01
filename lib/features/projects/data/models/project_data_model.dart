@@ -2,10 +2,12 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
+import 'package:tg_freelance/features/projects/domain/entities/proposal_entity.dart';
 
 class ProjectDataModel {
-  final Map<String, dynamic> liteAuthor;
-
+  final String authorId;
+  final String dirId;
   final String projectName; //TODO: length 200
   final int date;
   final Map<String, dynamic> budget;
@@ -13,10 +15,12 @@ class ProjectDataModel {
   final String description;
   final String expertiseLevel;
   final List<String> filePaths;
+  final List<String> skills;
   final List<Map<String, dynamic>> proposals;
 
   ProjectDataModel({
-    required this.liteAuthor,
+    required this.authorId,
+    required this.dirId,
     required this.projectName,
     required this.date,
     required this.budget,
@@ -25,10 +29,12 @@ class ProjectDataModel {
     required this.expertiseLevel,
     required this.filePaths,
     required this.proposals,
+    required this.skills,
   });
 
   ProjectDataModel copyWith({
-    Map<String, dynamic>? liteAuthor,
+    String? authorId,
+    String? dirId,
     String? projectName,
     int? date,
     Map<String, dynamic>? budget,
@@ -36,10 +42,13 @@ class ProjectDataModel {
     String? description,
     String? expertiseLevel,
     List<String>? filePaths,
+    List<String>? skills,
     List<Map<String, dynamic>>? proposals,
   }) {
     return ProjectDataModel(
-      liteAuthor: liteAuthor ?? this.liteAuthor,
+      authorId: authorId ?? this.authorId,
+      dirId: dirId ?? this.dirId,
+      skills: skills ?? this.skills,
       projectName: projectName ?? this.projectName,
       date: date ?? this.date,
       budget: budget ?? this.budget,
@@ -53,10 +62,11 @@ class ProjectDataModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'liteAuthor': liteAuthor,
+      'authorId': authorId,
       'projectName': projectName,
-      'date': date,
-      'budget': budget,
+      'timeStamp': date,
+      'projectBudget': budget,
+      'skills': skills,
       'projectType': projectType,
       'description': description,
       'expertiseLevel': expertiseLevel,
@@ -67,21 +77,17 @@ class ProjectDataModel {
 
   factory ProjectDataModel.fromMap(Map<String, dynamic> map) {
     return ProjectDataModel(
-      liteAuthor: Map<String, dynamic>.from(
-          (map['liteAuthor'] as Map<String, dynamic>)),
+      authorId: map['authorId'].toString(),
+      dirId: map['id'].toString(),
       projectName: map['projectName'] as String,
-      date: map['date'] as int,
-      budget:
-          Map<String, dynamic>.from((map['budget'] as Map<String, dynamic>)),
+      date: int.parse(map['timeStamp']),
+      skills: List<String>.from((map['skills'])),
+      budget: Map<String, dynamic>.from((map['projectBudget'])),
       projectType: map['projectType'] as String,
       description: map['description'] as String,
       expertiseLevel: map['expertiseLevel'] as String,
-      filePaths: List<String>.from((map['filePaths'] as List<String>)),
-      proposals: List<Map<String, dynamic>>.from(
-        (map['proposals']).map<Map<String, dynamic>>(
-          (x) => x,
-        ),
-      ),
+      filePaths: List<String>.from((map['filePaths'] ?? [])),
+      proposals: List<Map<String, dynamic>>.from((map['proposals'] ?? [])),
     );
   }
 
@@ -92,14 +98,14 @@ class ProjectDataModel {
 
   @override
   String toString() {
-    return 'ProjectDataModel(liteAuthor: $liteAuthor, projectName: $projectName, date: $date, budget: $budget, projectType: $projectType, description: $description, expertiseLevel: $expertiseLevel, filePaths: $filePaths, proposals: $proposals)';
+    return 'ProjectDataModel(authorId: $authorId, projectName: $projectName, date: $date, budget: $budget, projectType: $projectType, description: $description, expertiseLevel: $expertiseLevel, filePaths: $filePaths, proposals: $proposals)';
   }
 
   @override
   bool operator ==(covariant ProjectDataModel other) {
     if (identical(this, other)) return true;
 
-    return mapEquals(other.liteAuthor, liteAuthor) &&
+    return other.authorId == authorId &&
         other.projectName == projectName &&
         other.date == date &&
         mapEquals(other.budget, budget) &&
@@ -112,7 +118,7 @@ class ProjectDataModel {
 
   @override
   int get hashCode {
-    return liteAuthor.hashCode ^
+    return authorId.hashCode ^
         projectName.hashCode ^
         date.hashCode ^
         budget.hashCode ^
@@ -121,5 +127,22 @@ class ProjectDataModel {
         expertiseLevel.hashCode ^
         filePaths.hashCode ^
         proposals.hashCode;
+  }
+
+  ProjectEntity toEntity() {
+    return ProjectEntity(
+        authorId: authorId,
+        projectName: projectName,
+        date: DateTime.fromMillisecondsSinceEpoch(date),
+        budget: BudgetClass.fromMap(budget),
+        projectType: ProjectType.values.byName(projectType),
+        description: description,
+        expertiseLevel: ExpertiseLevel.values.byName(expertiseLevel),
+        dirId: dirId,
+        skills: skills,
+        filePaths: filePaths,
+        proposals: proposals.map((el) {
+          return ProposalEntity.fromMap(el);
+        }).toList());
   }
 }

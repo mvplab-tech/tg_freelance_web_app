@@ -1,6 +1,30 @@
-part of 'project_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:tg_freelance/core/status.dart';
+import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 
-@immutable
-sealed class ProjectState {}
+part 'project_state.freezed.dart';
 
-final class ProjectInitial extends ProjectState {}
+@freezed
+sealed class ProjectState with _$ProjectState {
+  const factory ProjectState.mainState({
+    required Status status,
+    required List<ProjectEntity> available,
+    required List<ProjectEntity> userResponses,
+    required List<ProjectEntity> usersProjects,
+    // final UserEntity? elseUser,
+  }) = ProjectMainState;
+}
+
+extension ProjectStateX on ProjectState {
+  List<Widget> get tabs => [
+        if (userResponses.isNotEmpty)
+          const Tab(
+            text: 'My responses',
+          ),
+        if (usersProjects.isNotEmpty)
+          const Tab(
+            text: 'My projects',
+          )
+      ];
+}

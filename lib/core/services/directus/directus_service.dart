@@ -1,4 +1,5 @@
 import 'package:directus/directus.dart';
+import 'package:file_picker/file_picker.dart';
 
 abstract interface class DirectusService {
   Future<void> initDirectus();
@@ -20,4 +21,6 @@ abstract interface class DirectusService {
       {required String collection, Filters? filters});
 
   Future<void> deleteOne({required String collection, required String id});
+
+  Future<void> uploadFile({required PlatformFile file});
 }

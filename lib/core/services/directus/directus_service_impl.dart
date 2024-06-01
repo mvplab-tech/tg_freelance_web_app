@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:directus/directus.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:tg_freelance/core/di/injectable.dart';
 import 'package:tg_freelance/core/services/directus/directus_service.dart';
@@ -109,6 +110,18 @@ class DirectusServiceImpl implements DirectusService {
     } on DirectusError catch (e) {
       log(e.message.toString());
       return {};
+    }
+  }
+
+  @override
+  Future<void> uploadFile({required PlatformFile file}) async {
+    try {
+      final res = await sdk.files.uploadBytesFile(file.bytes!, file.name);
+      log(res.toString());
+    } on DirectusError catch (e) {
+      log(e.message.toString());
+      log(e.additionalInfo.toString());
+      return;
     }
   }
 }

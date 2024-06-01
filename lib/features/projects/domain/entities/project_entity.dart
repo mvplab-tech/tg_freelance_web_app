@@ -1,44 +1,53 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'package:tg_freelance/features/projects/data/models/project_data_model.dart';
 import 'package:tg_freelance/features/projects/domain/entities/proposal_entity.dart';
-import 'package:tg_freelance/features/user/domain/lite_user_entity.dart';
 
 class ProjectEntity {
-  final LiteUserEntity liteAuthor;
+  final String authorId;
+  final String dirId;
   final String projectName; //TODO: length 200
   final DateTime date;
   final BudgetClass budget;
   final ProjectType projectType;
   final String description;
   final ExpertiseLevel expertiseLevel;
+  final List<String> skills;
   final List<String>? filePaths;
   final List<ProposalEntity>? proposals;
 
   ProjectEntity({
-    required this.liteAuthor,
+    required this.authorId,
     required this.projectName,
     required this.date,
     required this.budget,
     required this.projectType,
     required this.description,
     required this.expertiseLevel,
+    required this.dirId,
+    required this.skills,
     this.filePaths,
     this.proposals,
   });
 
   ProjectEntity copyWith({
-    LiteUserEntity? liteAuthor,
+    String? authorId,
     String? projectName,
+    String? dirId,
     DateTime? date,
     BudgetClass? budget,
     ProjectType? projectType,
     String? description,
     ExpertiseLevel? expertiseLevel,
+    List<String>? skills,
     List<String>? filePaths,
     List<ProposalEntity>? proposals,
   }) {
     return ProjectEntity(
-      liteAuthor: liteAuthor ?? this.liteAuthor,
+      authorId: authorId ?? this.authorId,
+      dirId: dirId ?? this.dirId,
       projectName: projectName ?? this.projectName,
+      skills: skills ?? this.skills,
       date: date ?? this.date,
       budget: budget ?? this.budget,
       projectType: projectType ?? this.projectType,
@@ -46,6 +55,28 @@ class ProjectEntity {
       expertiseLevel: expertiseLevel ?? this.expertiseLevel,
       filePaths: filePaths ?? this.filePaths,
       proposals: proposals ?? this.proposals,
+    );
+  }
+
+  ProjectDataModel toModel() {
+    return ProjectDataModel(
+      authorId: authorId,
+      dirId: dirId,
+      projectName: projectName,
+      date: date.millisecondsSinceEpoch,
+      budget: {
+        'amount': budget.amount,
+        'currency': budget.currency,
+      },
+      projectType: projectType.name,
+      description: description,
+      expertiseLevel: expertiseLevel.name,
+      filePaths: filePaths ?? [],
+      proposals: proposals?.map((el) {
+            return el.toMap();
+          }).toList() ??
+          [],
+      skills: skills,
     );
   }
 
@@ -115,6 +146,11 @@ class ProjectEntity {
   //     filePaths.hashCode ^
   //     proposals.hashCode;
   // }
+
+  @override
+  String toString() {
+    return 'ProjectEntity(authorId: $authorId, projectName: $projectName, date: $date, budget: $budget, projectType: $projectType, description: $description, expertiseLevel: $expertiseLevel, filePaths: $filePaths, proposals: $proposals)';
+  }
 }
 
 enum ProjectType {
@@ -153,6 +189,26 @@ extension ProjectTypeX on ProjectType {
       ProjectType.projectManagement => 'Project Management',
       ProjectType.socialMediaManagement => 'Social Media Management',
       ProjectType.translation => 'Translation',
+    };
+  }
+
+  String getAsset() {
+    const String ic = 'assets/icons/';
+
+    return switch (this) {
+      ProjectType.webDevelopment => '${ic}web_dev.svg',
+      ProjectType.mobileDevelopment => '${ic}mobile_dev.svg',
+      ProjectType.graphicDesign => '${ic}graphic_design.svg',
+      ProjectType.contentWriting => '${ic}content_writing.svg',
+      ProjectType.digitalMarketing => '${ic}digital_marketing.svg',
+      ProjectType.seoOptimization => '${ic}seo.svg',
+      ProjectType.videoEditing => '${ic}video_edit.svg',
+      ProjectType.dataAnalysis => '${ic}data.svg',
+      ProjectType.uxUiDesign => '${ic}ui_ux.svg',
+      ProjectType.softwareTesting => '${ic}qa.svg',
+      ProjectType.projectManagement => '${ic}project_management.svg',
+      ProjectType.socialMediaManagement => '${ic}social_media.svg',
+      ProjectType.translation => '${ic}translation.svg',
     };
   }
 
@@ -302,6 +358,15 @@ extension ExpertiseLevelX on ExpertiseLevel {
       ExpertiseLevel.master => 'Master, 5+ years of experience'
     };
   }
+
+  String getName() {
+    return switch (this) {
+      ExpertiseLevel.beginner => 'Beginner',
+      ExpertiseLevel.intermediate => 'Intermediate',
+      ExpertiseLevel.advanced => 'Advanced',
+      ExpertiseLevel.master => 'Master',
+    };
+  }
 }
 
 class BudgetClass {
@@ -343,6 +408,8 @@ class BudgetClass {
 
   @override
   String toString() => 'BudgetClass(amount: $amount, currency: $currency)';
+
+  String uiString() => '$currency $amount';
 
   @override
   bool operator ==(covariant BudgetClass other) {

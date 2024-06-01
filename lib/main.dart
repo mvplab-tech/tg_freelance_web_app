@@ -5,6 +5,7 @@ import 'package:tg_freelance/app.dart';
 import 'package:tg_freelance/core/constants/tg_consts.dart';
 import 'package:tg_freelance/core/di/injectable.dart';
 import 'package:tg_freelance/core/services/directus/directus_service_impl.dart';
+import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_bloc.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 
@@ -20,12 +21,12 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  // TelegramWebAppFake fk = TelegramWebAppFake();
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => getIt<UserBloc>()),
+        BlocProvider(create: (context) => getIt<ProjectBloc>()),
       ],
       child: Pulse(
         theme: TelegramThemeUtil.getTheme(

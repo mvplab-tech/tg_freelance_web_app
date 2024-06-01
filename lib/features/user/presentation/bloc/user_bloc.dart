@@ -12,6 +12,7 @@ import 'package:tg_freelance/core/router/app_routes.dart';
 import 'package:tg_freelance/core/router/navigation_service.dart';
 import 'package:tg_freelance/core/services/directus/directus_service_impl.dart';
 import 'package:tg_freelance/core/status.dart';
+import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
 import 'package:tg_freelance/features/user/domain/user_entity.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_state.dart';
 
@@ -46,10 +47,18 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         },
       ),
     );
+
     if (existingUser.isNotEmpty) {
       UserEntity user = UserEntity.fromMap(existingUser.first);
       emit(state.copyWith(authorizedUser: user));
-      navigationService.config.pushReplacement(AppRoutes.projects.path);
+
+      projectBloc.add(ProjectFetchProjects());
+      Timer.periodic(const Duration(milliseconds: 500), (t) {
+        if (projectBloc.state.status != Status.loading) {
+          navigationService.config.pushReplacement(AppRoutes.projects.path);
+          t.cancel();
+        }
+      });
     } else {
       String userName = '${tgUser.firstname} ${tgUser.lastname}'.trim();
       emit(
@@ -61,6 +70,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           ),
         ),
       );
+      projectBloc.add(ProjectFetchProjects());
       navigationService.config.pushReplacement(AppRoutes.createAccount.path);
     }
   }

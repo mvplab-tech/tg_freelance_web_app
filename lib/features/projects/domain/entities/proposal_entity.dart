@@ -1,31 +1,36 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class ProposalEntity {
   final int dirId;
-  final String userName;
-  final String userPicUrl;
+  final int authorId;
+  final int projectId;
+  final String authorName;
   final String coverLetter;
   final DateTime date;
 
   ProposalEntity({
     required this.dirId,
-    required this.userName,
-    required this.userPicUrl,
+    required this.authorId,
+    required this.projectId,
+    required this.authorName,
     required this.coverLetter,
     required this.date,
   });
 
   ProposalEntity copyWith({
     int? dirId,
-    String? userName,
-    String? userPicUrl,
+    int? authorId,
+    int? projectId,
+    String? authorName,
     String? coverLetter,
     DateTime? date,
   }) {
     return ProposalEntity(
       dirId: dirId ?? this.dirId,
-      userName: userName ?? this.userName,
-      userPicUrl: userPicUrl ?? this.userPicUrl,
+      authorId: authorId ?? this.authorId,
+      projectId: projectId ?? this.projectId,
+      authorName: authorName ?? this.authorName,
       coverLetter: coverLetter ?? this.coverLetter,
       date: date ?? this.date,
     );
@@ -33,21 +38,23 @@ class ProposalEntity {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'dirId': dirId,
-      'userName': userName,
-      'userPicUrl': userPicUrl,
+      'dirid': dirId,
+      'authorId': authorId,
+      'projectId': projectId,
+      'authorName': authorName,
       'coverLetter': coverLetter,
-      'date': date.millisecondsSinceEpoch,
+      'dateTime': date.millisecondsSinceEpoch,
     };
   }
 
   factory ProposalEntity.fromMap(Map<String, dynamic> map) {
     return ProposalEntity(
-      dirId: map['dirId'] as int,
-      userName: map['userName'] as String,
-      userPicUrl: map['userPicUrl'] as String,
+      dirId: map['id'] as int,
+      authorId: map['authorId'] as int,
+      projectId: map['projectId'] as int,
+      authorName: map['authorName'] as String,
       coverLetter: map['coverLetter'] as String,
-      date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
+      date: DateTime.fromMillisecondsSinceEpoch(int.parse(map['dateTime'])),
     );
   }
 
@@ -58,7 +65,7 @@ class ProposalEntity {
 
   @override
   String toString() {
-    return 'ProposalEntity(dirId: $dirId, userName: $userName, userPicUrl: $userPicUrl, coverLetter: $coverLetter, date: $date)';
+    return 'ProposalEntity(dirId: $dirId, authorId: $authorId, projectId: $projectId, authorName: $authorName, coverLetter: $coverLetter, date: $date)';
   }
 
   @override
@@ -66,8 +73,9 @@ class ProposalEntity {
     if (identical(this, other)) return true;
 
     return other.dirId == dirId &&
-        other.userName == userName &&
-        other.userPicUrl == userPicUrl &&
+        other.authorId == authorId &&
+        other.projectId == projectId &&
+        other.authorName == authorName &&
         other.coverLetter == coverLetter &&
         other.date == date;
   }
@@ -75,8 +83,9 @@ class ProposalEntity {
   @override
   int get hashCode {
     return dirId.hashCode ^
-        userName.hashCode ^
-        userPicUrl.hashCode ^
+        authorId.hashCode ^
+        projectId.hashCode ^
+        authorName.hashCode ^
         coverLetter.hashCode ^
         date.hashCode;
   }
