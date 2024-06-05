@@ -16,14 +16,22 @@ final tonBloc = getIt<TonBloc>();
 
 @Singleton()
 class TonBloc extends Bloc<TonEvent, TonState> {
-  TonBloc() : super(const TonMainState(status: Status.initial)) {
+  TonBloc()
+      : super(const TonMainState(
+          status: Status.initial,
+          availableWallets: [],
+          connector: null,
+        )) {
     on<TonInit>(_init);
   }
 
   FutureOr<void> _init(TonInit event, Emitter<TonState> emit) async {
     final connector = TonConnect(
         'https://raw.githubusercontent.com/XaBbl4/pytonconnect/main/pytonconnect-manifest.json');
+    emit(state.copyWith(connector: connector));
     final List<WalletApp> wallets = await connector.getWallets();
-    // print('Wallets: ${wallets.toString()}');
+    emit(state.copyWith(
+      availableWallets: wallets,
+    ));
   }
 }

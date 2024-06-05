@@ -65,7 +65,6 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
 
     final all = await directus.readMany(
         collection: DirectusCollections.projectsCollection);
-
     for (var map in all) {
       final maps =
           await fetchProposals(List.from(map['proposals']).cast<int>());

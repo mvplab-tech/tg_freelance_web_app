@@ -5,6 +5,7 @@ enum AppRoutes {
   createProject('createProject', '/createProject'),
   projectPage('projectPage', '/projectPage'),
   proposalPage('proposalPage', '/proposalPage'),
+  wallets('wallets', '/wallets'),
   splash('splash', '/splash');
 
   final String name;

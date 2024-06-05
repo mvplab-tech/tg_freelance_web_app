@@ -97,7 +97,7 @@ mixin EditProfileMixin on State<EditProfile> {
             : user.userName,
         freelancer: profession != null && expertiseLevel != null
             ? FreelancerProfile(
-                aboutMeFreelancer: nameController.text.isNotEmpty
+                aboutMeFreelancer: aboutFreelancerController.text.isNotEmpty
                     ? aboutFreelancerController.text.trim()
                     : user.freelancerProfile?.aboutMeFreelancer ?? '',
                 occupation: profession ?? user.freelancerProfile!.occupation,

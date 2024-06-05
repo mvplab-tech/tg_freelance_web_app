@@ -18,13 +18,13 @@ sealed class ProjectState with _$ProjectState {
 
 extension ProjectStateX on ProjectState {
   List<Widget> get tabs => [
-        if (userResponses.isNotEmpty)
+        if (usersProjects.isNotEmpty)
           const Tab(
             text: 'My projects',
           ),
-        if (usersProjects.isNotEmpty)
+        if (userResponses.isNotEmpty)
           const Tab(
-            text: 'My reponses',
+            text: 'My responses',
           )
       ];
 }

@@ -17,19 +17,27 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$TonState {
   Status get status => throw _privateConstructorUsedError;
+  List<WalletApp> get availableWallets => throw _privateConstructorUsedError;
+  TonConnect? get connector => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Status status) mainState,
+    required TResult Function(Status status, List<WalletApp> availableWallets,
+            TonConnect? connector)
+        mainState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Status status)? mainState,
+    TResult? Function(Status status, List<WalletApp> availableWallets,
+            TonConnect? connector)?
+        mainState,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Status status)? mainState,
+    TResult Function(Status status, List<WalletApp> availableWallets,
+            TonConnect? connector)?
+        mainState,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -60,7 +68,8 @@ abstract class $TonStateCopyWith<$Res> {
   factory $TonStateCopyWith(TonState value, $Res Function(TonState) then) =
       _$TonStateCopyWithImpl<$Res, TonState>;
   @useResult
-  $Res call({Status status});
+  $Res call(
+      {Status status, List<WalletApp> availableWallets, TonConnect? connector});
 }
 
 /// @nodoc
@@ -77,12 +86,22 @@ class _$TonStateCopyWithImpl<$Res, $Val extends TonState>
   @override
   $Res call({
     Object? status = null,
+    Object? availableWallets = null,
+    Object? connector = freezed,
   }) {
     return _then(_value.copyWith(
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as Status,
+      availableWallets: null == availableWallets
+          ? _value.availableWallets
+          : availableWallets // ignore: cast_nullable_to_non_nullable
+              as List<WalletApp>,
+      connector: freezed == connector
+          ? _value.connector
+          : connector // ignore: cast_nullable_to_non_nullable
+              as TonConnect?,
     ) as $Val);
   }
 }
@@ -95,7 +114,8 @@ abstract class _$$TonMainStateImplCopyWith<$Res>
       __$$TonMainStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Status status});
+  $Res call(
+      {Status status, List<WalletApp> availableWallets, TonConnect? connector});
 }
 
 /// @nodoc
@@ -110,12 +130,22 @@ class __$$TonMainStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
+    Object? availableWallets = null,
+    Object? connector = freezed,
   }) {
     return _then(_$TonMainStateImpl(
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as Status,
+      availableWallets: null == availableWallets
+          ? _value._availableWallets
+          : availableWallets // ignore: cast_nullable_to_non_nullable
+              as List<WalletApp>,
+      connector: freezed == connector
+          ? _value.connector
+          : connector // ignore: cast_nullable_to_non_nullable
+              as TonConnect?,
     ));
   }
 }
@@ -123,14 +153,29 @@ class __$$TonMainStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$TonMainStateImpl implements TonMainState {
-  const _$TonMainStateImpl({required this.status});
+  const _$TonMainStateImpl(
+      {required this.status,
+      required final List<WalletApp> availableWallets,
+      required this.connector})
+      : _availableWallets = availableWallets;
 
   @override
   final Status status;
+  final List<WalletApp> _availableWallets;
+  @override
+  List<WalletApp> get availableWallets {
+    if (_availableWallets is EqualUnmodifiableListView)
+      return _availableWallets;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_availableWallets);
+  }
+
+  @override
+  final TonConnect? connector;
 
   @override
   String toString() {
-    return 'TonState.mainState(status: $status)';
+    return 'TonState.mainState(status: $status, availableWallets: $availableWallets, connector: $connector)';
   }
 
   @override
@@ -138,11 +183,16 @@ class _$TonMainStateImpl implements TonMainState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TonMainStateImpl &&
-            (identical(other.status, status) || other.status == status));
+            (identical(other.status, status) || other.status == status) &&
+            const DeepCollectionEquality()
+                .equals(other._availableWallets, _availableWallets) &&
+            (identical(other.connector, connector) ||
+                other.connector == connector));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status);
+  int get hashCode => Object.hash(runtimeType, status,
+      const DeepCollectionEquality().hash(_availableWallets), connector);
 
   @JsonKey(ignore: true)
   @override
@@ -153,27 +203,33 @@ class _$TonMainStateImpl implements TonMainState {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Status status) mainState,
+    required TResult Function(Status status, List<WalletApp> availableWallets,
+            TonConnect? connector)
+        mainState,
   }) {
-    return mainState(status);
+    return mainState(status, availableWallets, connector);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Status status)? mainState,
+    TResult? Function(Status status, List<WalletApp> availableWallets,
+            TonConnect? connector)?
+        mainState,
   }) {
-    return mainState?.call(status);
+    return mainState?.call(status, availableWallets, connector);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Status status)? mainState,
+    TResult Function(Status status, List<WalletApp> availableWallets,
+            TonConnect? connector)?
+        mainState,
     required TResult orElse(),
   }) {
     if (mainState != null) {
-      return mainState(status);
+      return mainState(status, availableWallets, connector);
     }
     return orElse();
   }
@@ -208,11 +264,17 @@ class _$TonMainStateImpl implements TonMainState {
 }
 
 abstract class TonMainState implements TonState {
-  const factory TonMainState({required final Status status}) =
-      _$TonMainStateImpl;
+  const factory TonMainState(
+      {required final Status status,
+      required final List<WalletApp> availableWallets,
+      required final TonConnect? connector}) = _$TonMainStateImpl;
 
   @override
   Status get status;
+  @override
+  List<WalletApp> get availableWallets;
+  @override
+  TonConnect? get connector;
   @override
   @JsonKey(ignore: true)
   _$$TonMainStateImplCopyWith<_$TonMainStateImpl> get copyWith =>

@@ -10,6 +10,7 @@ import 'package:tg_freelance/features/projects/presentation/pages/project_page/p
 import 'package:tg_freelance/features/projects/presentation/pages/projects_page.dart';
 import 'package:tg_freelance/features/projects/presentation/pages/proposal_page.dart';
 import 'package:tg_freelance/features/splash_screen.dart';
+import 'package:tg_freelance/features/ton/presentation/wallets.dart';
 import 'package:tg_freelance/features/user/presentation/pages/create_account_page.dart';
 import 'package:tg_freelance/features/user/presentation/pages/edit_profile.dart';
 
@@ -75,6 +76,11 @@ class NavigationService {
           builder: (_, state) => ProposalPage(
             data: state.extra as ProposalPageData,
           ),
+        ),
+        GoRoute(
+          name: AppRoutes.wallets.name,
+          path: AppRoutes.wallets.path,
+          builder: (_, state) => const Wallets(),
         ),
       ],
     );

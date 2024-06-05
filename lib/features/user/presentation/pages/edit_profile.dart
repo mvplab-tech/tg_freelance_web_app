@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:tg_freelance/core/extensions/build_context_extension.dart';
+import 'package:tg_freelance/core/router/app_routes.dart';
 import 'package:tg_freelance/core/status.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/user/domain/user_entity.dart';
@@ -63,6 +65,14 @@ class _EditProfileState extends State<EditProfile>
                     )
                   ],
                 ),
+                const SizedBox(
+                  height: 16,
+                ),
+                OutlinedButton(
+                    onPressed: () {
+                      context.push(AppRoutes.wallets.path);
+                    },
+                    child: Text('wallets')),
                 const SizedBox(
                   height: 16,
                 ),
