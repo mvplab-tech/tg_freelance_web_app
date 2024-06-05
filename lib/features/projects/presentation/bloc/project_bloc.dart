@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
@@ -35,6 +34,8 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     on<ProjectFetchProjects>(_fetchProjects);
     on<ProjectOpenProject>(_openProject);
     on<ProjectSubmitProposal>(_submitProposal);
+    on<EditProjectEvent>(_editProject);
+    on<DeleteProject>(_deleteProject);
   }
 
   FutureOr<void> _createNew(
@@ -60,6 +61,8 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     emit(state.copyWith(status: Status.loading));
     List<ProjectEntity> myProjects = [];
     List<ProjectEntity> available = [];
+    List<ProjectEntity> myReposnes = [];
+
     final all = await directus.readMany(
         collection: DirectusCollections.projectsCollection);
 
@@ -74,18 +77,28 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     }).toList();
 
     for (ProjectEntity ent in allEnts) {
-      if (ent.authorId == userbloc.state.authorizedUser.dirId.toString()) {
+      int userId = userbloc.state.authorizedUser.dirId;
+      if (ent.authorId == userId.toString()) {
         myProjects.add(ent);
       } else {
         available.add(ent);
       }
+
+      if (ent.proposals != null) {
+        for (ProposalEntity prop in ent.proposals!) {
+          if (prop.authorId == userId) {
+            myReposnes.add(ent);
+            available.remove(ent);
+          }
+        }
+      }
     }
 
     emit(state.copyWith(
-      usersProjects: myProjects,
-      status: Status.initial,
-      available: available,
-    ));
+        usersProjects: myProjects,
+        status: Status.initial,
+        available: available,
+        userResponses: myReposnes));
   }
 
   Future<List<Map<String, dynamic>>> fetchProposals(List<int> ids) async {
@@ -103,12 +116,13 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       ProjectOpenProject event, Emitter<ProjectState> emit) async {
     emit(state.copyWith(status: Status.loading));
     UserEntity authorized = userbloc.state.authorizedUser;
+    ProjectEntity incoming = event.entity;
     LiteUserEntity author;
 
-    if (event.entity.authorId != authorized.dirId.toString()) {
+    if (incoming.authorId != authorized.dirId.toString()) {
       final rawAuthor = await directus.readOne(
         collection: DirectusCollections.usersCollection,
-        id: event.entity.authorId,
+        id: incoming.authorId,
       );
       author = LiteUserEntity.fromMap(rawAuthor);
     } else {
@@ -120,17 +134,16 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     }
 
     final rawPrj = await directus.readOne(
-        collection: DirectusCollections.projectsCollection,
-        id: event.entity.dirId);
+        collection: DirectusCollections.projectsCollection, id: incoming.dirId);
     List<int> rawIds = List.from(rawPrj['proposals']).cast<int>();
 
-    if (rawIds.length != event.entity.proposals?.length) {
+    if (rawIds.length != incoming.proposals?.length) {
       Set<int> rawSet = rawIds.toSet();
       List<int> fresh = [];
       List<ProposalEntity> props = [];
 
-      if (event.entity.proposals?.isNotEmpty ?? false) {
-        for (ProposalEntity prop in event.entity.proposals!) {
+      if (incoming.proposals?.isNotEmpty ?? false) {
+        for (ProposalEntity prop in incoming.proposals!) {
           if (!rawSet.contains(prop.dirId)) {
             fresh.add(prop.dirId);
           }
@@ -142,19 +155,17 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       for (var map in maps) {
         props.add(ProposalEntity.fromMap(map));
       }
-      event.entity.copyWith(proposals: props);
+      incoming = incoming.copyWith(proposals: props);
     }
 
     navigationService.config.push(
       AppRoutes.projectPage.path,
       extra: ProjectPageData(
-        entity: event.entity,
+        entity: incoming,
         author: author,
         isMe: event.entity.authorId == authorized.dirId.toString(),
       ),
     );
-
-    //TODO implement proposals fetch
 
     emit(state.copyWith(status: Status.initial));
   }
@@ -168,13 +179,50 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       authorName: user.userName,
       coverLetter: event.coverLetter,
       date: DateTime.now(),
-      projectId: event.projectId,
+      projectId: int.parse(event.entity.dirId),
     );
     final raw = await directus.createOne(
       collection: DirectusCollections.proposalsCollections,
       data: proposalEntity.toMap(),
     );
+    List<ProjectEntity> all = List.from(state.available);
+    List<ProjectEntity> my = List.from(state.userResponses);
+    all.remove(event.entity);
+    my.add(event.entity);
+    emit(state.copyWith(available: all, userResponses: my));
     navigationService.config.pop();
     log(raw.toString());
+  }
+
+  FutureOr<void> _editProject(
+      EditProjectEvent event, Emitter<ProjectState> emit) async {
+    emit(state.copyWith(status: Status.loading));
+
+    final ProjectDataModel model = event.projectEntity.toModel();
+
+    await directus.updateOne(
+        collection: DirectusCollections.projectsCollection,
+        itemId: event.projectEntity.dirId,
+        updateData: model.toMap());
+    List<ProjectEntity> userPrs = List.from(state.usersProjects);
+    ProjectEntity torplc =
+        userPrs.firstWhere((prj) => prj.dirId == event.projectEntity.dirId);
+    userPrs.remove(torplc);
+    userPrs.add(event.projectEntity);
+
+    emit(state.copyWith(status: Status.success, usersProjects: userPrs));
+    navigationService.config.go(AppRoutes.projects.path);
+    log('User projects: ${userPrs.length}');
+  }
+
+  FutureOr<void> _deleteProject(
+      DeleteProject event, Emitter<ProjectState> emit) async {
+    List<ProjectEntity> userprs = List.from(state.usersProjects);
+    userprs.remove(event.projectEntity);
+    emit(state.copyWith(usersProjects: userprs));
+    navigationService.config.go(AppRoutes.projects.path);
+    await directus.deleteOne(
+        collection: DirectusCollections.projectsCollection,
+        id: event.projectEntity.dirId);
   }
 }

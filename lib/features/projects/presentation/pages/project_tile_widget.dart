@@ -56,8 +56,9 @@ class ProjectTile extends StatelessWidget {
                         child: Text(
                           entity.description,
                           style: context.styles.body2,
-                          overflow: TextOverflow.fade,
+                          overflow: TextOverflow.ellipsis,
                           maxLines: 2,
+                          // softWrap: false,
                         ),
                       )
                     ],
@@ -67,7 +68,10 @@ class ProjectTile extends StatelessWidget {
                   width: 8,
                 ),
                 Text(
-                  entity.budget.uiString(),
+                  entity.budget.amount.toString().length >= 5
+                      // ? ''
+                      ? '${entity.budget.uiString().substring(0, 7)}...'
+                      : entity.budget.uiString(),
                   style: context.styles.header2,
                 ),
                 const SizedBox(

@@ -1,6 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:tg_freelance/core/extensions/build_context_extension.dart';
+import 'package:tg_freelance/core/router/passing_datas.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_bloc.dart';
@@ -9,7 +12,11 @@ import 'package:tg_freelance/features/user/presentation/bloc/user_state.dart';
 part 'new_project_mixin.dart';
 
 class CreateProject extends StatefulWidget {
-  const CreateProject({super.key});
+  final EditProjectData? editData;
+  const CreateProject({
+    Key? key,
+    this.editData,
+  }) : super(key: key);
 
   @override
   State<CreateProject> createState() => _CreateProjectState();
@@ -22,11 +29,25 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'New project',
+            isEdit ? 'Edit project' : 'New project',
             style: context.styles.header2,
           ),
+          elevation: 0,
           centerTitle: false,
           automaticallyImplyLeading: true,
+          actions: isEdit
+              ? [
+                  IconButton(
+                      onPressed: () {
+                        projectBloc.add(DeleteProject(
+                            projectEntity: widget.editData!.project));
+                      },
+                      icon: const Icon(
+                        Icons.delete_outline,
+                        color: Colors.red,
+                      )),
+                ]
+              : null,
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -190,35 +211,12 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
                         SizedBox(
                           height: 50,
                           child: ElevatedButton(
-                              onPressed: () {
-                                projectBloc.add(
-                                  ProjectCreateNew(
-                                    project: ProjectEntity(
-                                      authorId: userbloc
-                                          .state.authorizedUser.dirId
-                                          .toString(),
-                                      projectName: nameController.text.trim(),
-                                      date: DateTime.now(),
-                                      budget: BudgetClass(
-                                        amount: int.parse(
-                                            amountController.text.trim()),
-                                        currency: '\$',
-                                      ),
-                                      projectType: type!,
-                                      description:
-                                          descriptionController.text.trim(),
-                                      expertiseLevel: lvl!,
-                                      dirId: '0',
-                                      skills: skills,
-                                    ),
-                                  ),
-                                );
-                              },
+                              onPressed: buttonAction,
                               style: const ButtonStyle(
                                   backgroundColor:
                                       WidgetStatePropertyAll(Colors.green)),
                               child: Text(
-                                'done',
+                                isEdit ? 'Update' : 'Post',
                                 style: context.styles.body1,
                               )),
                         )

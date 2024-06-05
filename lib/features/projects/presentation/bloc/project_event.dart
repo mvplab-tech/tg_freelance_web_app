@@ -24,9 +24,30 @@ class ProjectOpenProject extends ProjectEvent {
 
 class ProjectSubmitProposal extends ProjectEvent {
   final String coverLetter;
-  final int projectId;
+  final ProjectEntity entity;
   ProjectSubmitProposal({
     required this.coverLetter,
-    required this.projectId,
+    required this.entity,
   });
 }
+
+class EditProjectEvent extends ProjectEvent {
+  final ProjectEntity projectEntity;
+  EditProjectEvent({
+    required this.projectEntity,
+  });
+}
+
+class DeleteProject extends ProjectEvent {
+  final ProjectEntity projectEntity;
+  DeleteProject({
+    required this.projectEntity,
+  });
+}
+
+// class ProjectsFetchUserResponds extends ProjectEvent {
+//   final List<int> propsIds;
+//   ProjectsFetchUserResponds({
+//     required this.propsIds,
+//   });
+// }

@@ -20,11 +20,11 @@ extension ProjectStateX on ProjectState {
   List<Widget> get tabs => [
         if (userResponses.isNotEmpty)
           const Tab(
-            text: 'My responses',
+            text: 'My projects',
           ),
         if (usersProjects.isNotEmpty)
           const Tab(
-            text: 'My projects',
+            text: 'My reponses',
           )
       ];
 }

@@ -49,7 +49,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     );
 
     if (existingUser.isNotEmpty) {
+      log(existingUser.first.toString());
       UserEntity user = UserEntity.fromMap(existingUser.first);
+      // if()
+
       emit(state.copyWith(authorizedUser: user));
 
       projectBloc.add(ProjectFetchProjects());
