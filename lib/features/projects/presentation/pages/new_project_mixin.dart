@@ -55,7 +55,13 @@ mixin NewProjectMixin on State<CreateProject> {
 
   void buttonAction() {
     ProjectEntity en = ProjectEntity(
-      authorId: userbloc.state.authorizedUser.dirId.toString(),
+      author: LiteUserEntity(
+        dirId: userbloc.state.authorizedUser.dirId,
+        userName: userbloc.state.authorizedUser.userName,
+        userPicUrl: '',
+        amountOfProjects: projectBloc.state.usersProjects.length,
+      ),
+      // authorId: userbloc.state.authorizedUser.dirId.toString(),
       projectName: nameController.text.trim(),
       date: DateTime.now(),
       budget: BudgetClass(

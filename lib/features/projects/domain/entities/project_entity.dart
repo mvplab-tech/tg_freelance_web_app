@@ -2,9 +2,10 @@
 import 'dart:convert';
 import 'package:tg_freelance/features/projects/data/models/project_data_model.dart';
 import 'package:tg_freelance/features/projects/domain/entities/proposal_entity.dart';
+import 'package:tg_freelance/features/user/domain/lite_user_entity.dart';
 
 class ProjectEntity {
-  final String authorId;
+  final LiteUserEntity author;
   final String dirId;
   final String projectName; //TODO: length 200
   final DateTime date;
@@ -17,7 +18,7 @@ class ProjectEntity {
   final List<ProposalEntity>? proposals;
 
   ProjectEntity({
-    required this.authorId,
+    required this.author,
     required this.projectName,
     required this.date,
     required this.budget,
@@ -31,7 +32,7 @@ class ProjectEntity {
   });
 
   ProjectEntity copyWith({
-    String? authorId,
+    LiteUserEntity? author,
     String? projectName,
     String? dirId,
     DateTime? date,
@@ -44,7 +45,7 @@ class ProjectEntity {
     List<ProposalEntity>? proposals,
   }) {
     return ProjectEntity(
-      authorId: authorId ?? this.authorId,
+      author: author ?? this.author,
       dirId: dirId ?? this.dirId,
       projectName: projectName ?? this.projectName,
       skills: skills ?? this.skills,
@@ -60,7 +61,7 @@ class ProjectEntity {
 
   ProjectDataModel toModel() {
     return ProjectDataModel(
-      authorId: authorId,
+      author: author.toMap(),
       dirId: dirId,
       projectName: projectName,
       date: date.millisecondsSinceEpoch,
@@ -149,7 +150,7 @@ class ProjectEntity {
 
   @override
   String toString() {
-    return 'ProjectEntity(authorId: $authorId, projectName: $projectName, date: $date, budget: $budget, projectType: $projectType, description: $description, expertiseLevel: $expertiseLevel, filePaths: $filePaths, proposals: $proposals)';
+    return 'ProjectEntity(authorId: $author, projectName: $projectName, date: $date, budget: $budget, projectType: $projectType, description: $description, expertiseLevel: $expertiseLevel, filePaths: $filePaths, proposals: $proposals)';
   }
 }
 

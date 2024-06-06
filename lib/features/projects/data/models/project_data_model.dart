@@ -2,11 +2,13 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/projects/domain/entities/proposal_entity.dart';
+import 'package:tg_freelance/features/user/domain/lite_user_entity.dart';
 
 class ProjectDataModel {
-  final String authorId;
+  final Map<String, dynamic> author;
   final String dirId;
   final String projectName; //TODO: length 200
   final int date;
@@ -19,7 +21,7 @@ class ProjectDataModel {
   final List<Map<String, dynamic>> proposals;
 
   ProjectDataModel({
-    required this.authorId,
+    required this.author,
     required this.dirId,
     required this.projectName,
     required this.date,
@@ -28,12 +30,12 @@ class ProjectDataModel {
     required this.description,
     required this.expertiseLevel,
     required this.filePaths,
-    required this.proposals,
     required this.skills,
+    required this.proposals,
   });
 
   ProjectDataModel copyWith({
-    String? authorId,
+    Map<String, dynamic>? author,
     String? dirId,
     String? projectName,
     int? date,
@@ -46,7 +48,7 @@ class ProjectDataModel {
     List<Map<String, dynamic>>? proposals,
   }) {
     return ProjectDataModel(
-      authorId: authorId ?? this.authorId,
+      author: author ?? this.author,
       dirId: dirId ?? this.dirId,
       skills: skills ?? this.skills,
       projectName: projectName ?? this.projectName,
@@ -62,7 +64,7 @@ class ProjectDataModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'authorId': authorId,
+      'authorId': author['dirId'],
       'projectName': projectName,
       'timeStamp': date,
       'projectBudget': budget,
@@ -77,7 +79,7 @@ class ProjectDataModel {
 
   factory ProjectDataModel.fromMap(Map<String, dynamic> map) {
     return ProjectDataModel(
-      authorId: map['authorId'].toString(),
+      author: map['author'],
       dirId: map['id'].toString(),
       projectName: map['projectName'] as String,
       date: int.parse(map['timeStamp']),
@@ -98,14 +100,14 @@ class ProjectDataModel {
 
   @override
   String toString() {
-    return 'ProjectDataModel(authorId: $authorId, projectName: $projectName, date: $date, budget: $budget, projectType: $projectType, description: $description, expertiseLevel: $expertiseLevel, filePaths: $filePaths, proposals: $proposals)';
+    return 'ProjectDataModel(authorId: $author, projectName: $projectName, date: $date, budget: $budget, projectType: $projectType, description: $description, expertiseLevel: $expertiseLevel, filePaths: $filePaths, proposals: $proposals)';
   }
 
   @override
   bool operator ==(covariant ProjectDataModel other) {
     if (identical(this, other)) return true;
 
-    return other.authorId == authorId &&
+    return other.author == author &&
         other.projectName == projectName &&
         other.date == date &&
         mapEquals(other.budget, budget) &&
@@ -118,7 +120,7 @@ class ProjectDataModel {
 
   @override
   int get hashCode {
-    return authorId.hashCode ^
+    return author.hashCode ^
         projectName.hashCode ^
         date.hashCode ^
         budget.hashCode ^
@@ -131,7 +133,7 @@ class ProjectDataModel {
 
   ProjectEntity toEntity() {
     return ProjectEntity(
-        authorId: authorId,
+        author: LiteUserEntity.fromMap(author),
         projectName: projectName,
         date: DateTime.fromMillisecondsSinceEpoch(date),
         budget: BudgetClass.fromMap(budget),

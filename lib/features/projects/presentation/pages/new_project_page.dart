@@ -6,6 +6,7 @@ import 'package:tg_freelance/core/extensions/build_context_extension.dart';
 import 'package:tg_freelance/core/router/passing_datas.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
+import 'package:tg_freelance/features/user/domain/lite_user_entity.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_bloc.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_state.dart';
 

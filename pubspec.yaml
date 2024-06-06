@@ -29,6 +29,7 @@ dependencies:
   darttonconnect: ^1.0.3
   http: ^0.13.6
   url_launcher: ^6.3.0
+  qr_flutter: ^4.1.0
 
 dependency_overrides:
   http: ^0.13.5  

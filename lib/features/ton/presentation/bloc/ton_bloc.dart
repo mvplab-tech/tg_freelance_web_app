@@ -27,7 +27,7 @@ class TonBloc extends Bloc<TonEvent, TonState> {
 
   FutureOr<void> _init(TonInit event, Emitter<TonState> emit) async {
     final connector = TonConnect(
-        'https://raw.githubusercontent.com/XaBbl4/pytonconnect/main/pytonconnect-manifest.json');
+        'https://tg-web-app-lrvsy.ondigitalocean.app/tonconnect-manifest.json');
     emit(state.copyWith(connector: connector));
     final List<WalletApp> wallets = await connector.getWallets();
     emit(state.copyWith(

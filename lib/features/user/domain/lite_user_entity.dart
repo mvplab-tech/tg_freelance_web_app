@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:tg_freelance/features/user/domain/user_entity.dart';
+
 class LiteUserEntity {
   final int dirId;
   final String userName;
@@ -34,6 +36,15 @@ class LiteUserEntity {
       'userPicUrl': userPicUrl,
       'amountOfProjects': amountOfProjects,
     };
+  }
+
+  factory LiteUserEntity.fromBloc(UserEntity user, int amountOfProjs) {
+    return LiteUserEntity(
+      dirId: user.dirId,
+      userName: user.userName,
+      userPicUrl: '',
+      amountOfProjects: amountOfProjs,
+    );
   }
 
   factory LiteUserEntity.fromMap(Map<String, dynamic> map) {
