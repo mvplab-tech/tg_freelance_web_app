@@ -107,14 +107,22 @@ class _EditProfileState extends State<EditProfile>
                             style: context.styles.body2,
                           ),
                           const Spacer(),
-                          Text(
-                            state.account != null
-                                ? 'Connected with: ${state.connector!.wallet?.device!.appName}'
-                                : "Disconnected",
-                            style: context.styles.body2.copyWith(
-                                color: state.account != null
-                                    ? Colors.green
-                                    : Colors.red),
+                          GestureDetector(
+                            onTap: () {
+                              if (state.connector != null &&
+                                  state.connector!.connected) {
+                                state.connector!.disconnect();
+                              }
+                            },
+                            child: Text(
+                              state.connector!.connected
+                                  ? 'Connected with: ${state.connector!.wallet?.device!.appName}'
+                                  : "Disconnected",
+                              style: context.styles.body2.copyWith(
+                                  color: state.connector!.connected
+                                      ? Colors.green
+                                      : Colors.red),
+                            ),
                           ),
                         ],
                       ),
