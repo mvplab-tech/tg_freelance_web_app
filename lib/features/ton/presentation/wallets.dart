@@ -53,23 +53,7 @@ class _WalletsState extends State<Wallets> {
   List<Widget> getButtons(
       List<WalletApp> wallets, TonState state, Function(String) callback) {
     List<Widget> tor = [];
-    for (var wallet in wallets) {
-      // print(wallet.toString());
-      tor.add(Padding(
-        padding: EdgeInsets.all(16),
-        child: OutlinedButton(
-          onPressed: () async {
-            final generatedUrl = await state.connector!.connect(wallet);
-            callback(generatedUrl);
-            // print('Generated url: $generatedUrl');
-            // if (await canLaunchUrl(Uri.parse(generatedUrl))) {
-            //   launchUrl(Uri.parse(generatedUrl));
-            // }
-          },
-          child: Text(wallet.name),
-        ),
-      ));
-    }
+
     return tor;
   }
 }

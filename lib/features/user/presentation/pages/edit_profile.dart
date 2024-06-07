@@ -7,6 +7,8 @@ import 'package:tg_freelance/core/extensions/build_context_extension.dart';
 import 'package:tg_freelance/core/router/app_routes.dart';
 import 'package:tg_freelance/core/status.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
+import 'package:tg_freelance/features/ton/presentation/bloc/ton_bloc.dart';
+import 'package:tg_freelance/features/ton/presentation/bloc/ton_state.dart';
 import 'package:tg_freelance/features/user/domain/user_entity.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_bloc.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_state.dart';
@@ -68,14 +70,12 @@ class _EditProfileState extends State<EditProfile>
                 const SizedBox(
                   height: 16,
                 ),
-                OutlinedButton(
-                    onPressed: () {
-                      context.push(AppRoutes.wallets.path);
-                    },
-                    child: Text('wallets')),
-                const SizedBox(
-                  height: 16,
-                ),
+                // OutlinedButton(
+                //     onPressed: () {
+                //       context.push(AppRoutes.wallets.path);
+                //     },
+                //     child: Text('wallets')),
+
                 Text(
                   'My name',
                   style: context.styles.body1,
@@ -87,6 +87,39 @@ class _EditProfileState extends State<EditProfile>
                   controller: nameController,
                   decoration: InputDecoration(
                       hintText: 'Current: ${state.authorizedUser.userName}'),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  'TON connection:',
+                  style: context.styles.body1,
+                ),
+                BlocBuilder<TonBloc, TonState>(
+                  bloc: tonBloc,
+                  builder: (context, state) {
+                    return SizedBox(
+                      height: 50,
+                      child: Row(
+                        children: [
+                          Text(
+                            'Status:',
+                            style: context.styles.body2,
+                          ),
+                          const Spacer(),
+                          Text(
+                            state.account != null
+                                ? 'Connected with: ${state.connector!.wallet?.device!.appName}'
+                                : "Disconnected",
+                            style: context.styles.body2.copyWith(
+                                color: state.account != null
+                                    ? Colors.green
+                                    : Colors.red),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(
                   height: 16,

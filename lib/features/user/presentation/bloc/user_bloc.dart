@@ -13,6 +13,7 @@ import 'package:tg_freelance/core/router/navigation_service.dart';
 import 'package:tg_freelance/core/services/directus/directus_service_impl.dart';
 import 'package:tg_freelance/core/status.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
+import 'package:tg_freelance/features/ton/presentation/bloc/ton_bloc.dart';
 import 'package:tg_freelance/features/user/domain/user_entity.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_state.dart';
 
@@ -80,23 +81,29 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   FutureOr<void> _createNewUser(
       UserCreateNewUser event, Emitter<UserState> emit) async {
-    final freshUser = await directus.createOne(
-      collection: DirectusCollections.usersCollection,
-      data: {
-        'tgId': state.authorizedUser.tgId,
-        'userName': event.name,
-      },
-    );
-    emit(
-      state.copyWith(
-        authorizedUser: UserEntity(
-          dirId: freshUser['id'],
-          tgId: state.authorizedUser.tgId,
-          userName: event.name,
-        ),
-      ),
-    );
-    navigationService.config.pushReplacement(AppRoutes.projects.path);
+    try {
+      emit(state.copyWith(status: Status.loading));
+      final freshUser = await directus.createOne(
+        collection: DirectusCollections.usersCollection,
+        data: {
+          'tgId': state.authorizedUser.tgId,
+          'userName': event.name,
+        },
+      );
+      emit(
+        state.copyWith(
+            authorizedUser: UserEntity(
+              dirId: freshUser['id'],
+              tgId: state.authorizedUser.tgId,
+              userName: event.name,
+            ),
+            status: Status.success),
+      );
+      navigationService.config.pushReplacement(AppRoutes.projects.path);
+    } on DirectusError catch (e) {
+      log(e.message);
+      emit(state.copyWith(status: Status.error));
+    }
   }
 
   FutureOr<void> _updateUser(

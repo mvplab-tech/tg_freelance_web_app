@@ -15,13 +15,8 @@ class SplashScreen extends StatelessWidget {
         webAppData: tg.isSupported ? tg : TelegramWebAppFake(),
       ),
     );
+    tonBloc.add(TonInit());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      tonBloc.add(TonInit());
-      if (!tonBloc.state.connector!.connected) {
-        tonBloc.state.connector!.restoreConnection();
-      }
-    });
     return Scaffold(
       body: Center(
         child: Text(

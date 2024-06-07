@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tg_freelance/core/extensions/build_context_extension.dart';
+import 'package:tg_freelance/core/status.dart';
+import 'package:tg_freelance/features/ton/presentation/bloc/ton_bloc.dart';
+import 'package:tg_freelance/features/ton/presentation/wallets_bottom_sheet.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_bloc.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_state.dart';
 
@@ -76,14 +81,21 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 ),
                 TextButton(
                     onPressed: () {
-                      userbloc.add(
-                        UserCreateNewUser(
-                          name: nameController.text.trim(),
-                        ),
-                      );
+                      showWalletsBottomSheet(context, 'Connect to TON with:');
+                      Timer.periodic(const Duration(milliseconds: 500), (t) {
+                        if (tonBloc.state.status != Status.loading &&
+                            tonBloc.state.account != null) {
+                          userbloc.add(
+                            UserCreateNewUser(
+                              name: nameController.text.trim(),
+                            ),
+                          );
+                          t.cancel();
+                        }
+                      });
                     },
                     child: Text(
-                      'Hello?..',
+                      'Name is ok, let\'s connect to TON',
                       style: context.styles.body1,
                     ))
                 // Row()
