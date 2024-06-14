@@ -8,6 +8,7 @@ class UserEntity {
   final int dirId;
   final int tgId;
   final String userName;
+  final String tgNickname;
   final FreelancerProfile? freelancerProfile;
   final ClientProfile? clientProfile;
 
@@ -15,6 +16,7 @@ class UserEntity {
     required this.dirId,
     required this.tgId,
     required this.userName,
+    required this.tgNickname,
     this.freelancerProfile,
     this.clientProfile,
   });
@@ -23,10 +25,12 @@ class UserEntity {
     int? dirId,
     int? tgId,
     String? userName,
+    String? tgNickname,
     FreelancerProfile? freelancerProfile,
     ClientProfile? clientProfile,
   }) {
     return UserEntity(
+      tgNickname: tgNickname ?? this.tgNickname,
       dirId: dirId ?? this.dirId,
       tgId: tgId ?? this.tgId,
       userName: userName ?? this.userName,
@@ -42,11 +46,13 @@ class UserEntity {
       'userName': userName,
       'freelancerProfile': freelancerProfile?.toMap(),
       'clientProfile': clientProfile?.toMap(),
+      'tgNickname': tgNickname
     };
   }
 
   factory UserEntity.fromMap(Map<String, dynamic> map) {
     return UserEntity(
+      tgNickname: map['tgNickname'] as String,
       dirId: map['id'] as int,
       tgId: map['tgId'] as int,
       userName: map['userName'] as String,

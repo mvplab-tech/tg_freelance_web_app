@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
-import 'package:darttonconnect/exceptions.dart';
 import 'package:darttonconnect/models/wallet_app.dart';
 import 'package:darttonconnect/parsers/connect_event.dart';
 import 'package:darttonconnect/ton_connect.dart';
@@ -11,7 +10,6 @@ import 'package:tg_freelance/core/di/injectable.dart';
 import 'package:tg_freelance/core/router/navigation_service.dart';
 import 'package:tg_freelance/core/status.dart';
 import 'package:tg_freelance/features/ton/presentation/bloc/ton_state.dart';
-import 'package:tg_freelance/features/user/presentation/bloc/user_bloc.dart';
 
 part 'ton_event.dart';
 // part 'ton_state.dart';

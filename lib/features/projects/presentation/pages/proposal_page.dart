@@ -3,11 +3,13 @@ import 'package:tg_freelance/core/constants/directus_collections.dart';
 import 'package:tg_freelance/core/extensions/build_context_extension.dart';
 import 'package:tg_freelance/core/router/passing_datas.dart';
 import 'package:tg_freelance/core/services/directus/directus_service_impl.dart';
+import 'package:tg_freelance/core/widgets/buttons.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/projects/domain/entities/proposal_entity.dart';
 import 'package:tg_freelance/features/projects/presentation/pages/project_page/project_page.dart';
 import 'package:tg_freelance/features/projects/presentation/widgets/proposal_tile.dart';
 import 'package:tg_freelance/features/user/domain/user_entity.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProposalPage extends StatelessWidget {
   final ProposalPageData data;
@@ -110,6 +112,8 @@ class _FreelancerDisplay extends StatefulWidget {
 }
 
 class __FreelancerDisplayState extends State<_FreelancerDisplay> {
+  bool contactShown = false;
+  late String link;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -118,8 +122,9 @@ class __FreelancerDisplayState extends State<_FreelancerDisplay> {
           id: widget.prop.authorId.toString()),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          FreelancerProfile author =
-              UserEntity.fromMap(snapshot.data!).freelancerProfile!;
+          UserEntity user = UserEntity.fromMap(snapshot.data!);
+          FreelancerProfile author = user.freelancerProfile!;
+          link = 'https://t.me/${user.tgNickname}';
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -155,16 +160,41 @@ class __FreelancerDisplayState extends State<_FreelancerDisplay> {
               const SizedBox(
                 height: 16,
               ),
-              SizedBox(
-                height: 60,
-                width: double.infinity,
-                child: OutlinedButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Show contacts',
-                      style: context.styles.body2,
-                    )),
-              ),
+              if (!contactShown)
+                SizedBox(
+                  height: 60,
+                  width: double.infinity,
+                  child: PulseButton(
+                    isLoading: false,
+                    enabled: true,
+                    text: 'Show contacts',
+                    action: () {
+                      setState(() {
+                        contactShown = true;
+                      });
+                    },
+                  ),
+                ),
+              if (contactShown)
+                SizedBox(
+                  height: 60,
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () async {
+                        if (await canLaunchUrl(Uri.parse(link))) {
+                          launchUrl(Uri.parse(link));
+                        }
+                      },
+                      child: Text(
+                        link,
+                        textAlign: TextAlign.center,
+                        style: context.styles.header2.copyWith(
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline),
+                      ),
+                    ),
+                  ),
+                )
             ],
           );
         } else {

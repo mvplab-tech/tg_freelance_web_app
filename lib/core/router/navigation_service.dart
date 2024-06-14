@@ -35,6 +35,8 @@ class NavigationService {
       navigatorKey: navigatorKey,
       initialLocation: AppRoutes.splash.path,
       debugLogDiagnostics: false,
+      overridePlatformDefaultLocation:
+          true, //понадобилось потому что при каком-то действии внутри, он начинал считать /projects своей initialLocation
       routes: [
         GoRoute(
           name: AppRoutes.createAccount.name,

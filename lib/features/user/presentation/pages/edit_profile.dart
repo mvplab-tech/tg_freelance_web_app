@@ -1,11 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:tg_freelance/core/extensions/build_context_extension.dart';
-import 'package:tg_freelance/core/router/app_routes.dart';
 import 'package:tg_freelance/core/status.dart';
+import 'package:tg_freelance/core/widgets/buttons.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/ton/presentation/bloc/ton_bloc.dart';
 import 'package:tg_freelance/features/ton/presentation/bloc/ton_state.dart';
@@ -41,6 +39,7 @@ class _EditProfileState extends State<EditProfile>
   Widget build(BuildContext context) {
     isButtonOk();
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
           'My profile',
@@ -70,11 +69,6 @@ class _EditProfileState extends State<EditProfile>
                 const SizedBox(
                   height: 16,
                 ),
-                // OutlinedButton(
-                //     onPressed: () {
-                //       context.push(AppRoutes.wallets.path);
-                //     },
-                //     child: Text('wallets')),
 
                 Text(
                   'My name',
@@ -115,11 +109,11 @@ class _EditProfileState extends State<EditProfile>
                               }
                             },
                             child: Text(
-                              state.connector!.connected
+                              state.connector?.connected ?? false
                                   ? 'Connected with: ${state.connector!.wallet?.device!.appName}'
                                   : "Disconnected",
                               style: context.styles.body2.copyWith(
-                                  color: state.connector!.connected
+                                  color: state.connector?.connected ?? false
                                       ? Colors.green
                                       : Colors.red),
                             ),
@@ -152,27 +146,16 @@ class _EditProfileState extends State<EditProfile>
                 const SizedBox(
                   height: 16,
                 ),
-                if (isButtonAvailable)
-                  SizedBox(
-                    height: 50,
-                    child: ElevatedButton(
-                      style: const ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(
-                        Colors.green,
-                      )),
-                      onPressed: state.status != Status.loading
-                          ? () {
-                              buttonAction();
-                            }
-                          : () {},
-                      child: state.status != Status.loading
-                          ? Text(
-                              'update',
-                              style: context.styles.body1,
-                            )
-                          : const CircularProgressIndicator(),
-                    ),
-                  )
+                // if (isButtonAvailable)
+                SizedBox(
+                  height: 50,
+                  child: PulseButton(
+                    isLoading: state.status == Status.loading,
+                    enabled: isButtonAvailable,
+                    text: 'update',
+                    action: buttonAction,
+                  ),
+                )
               ],
             ),
           );

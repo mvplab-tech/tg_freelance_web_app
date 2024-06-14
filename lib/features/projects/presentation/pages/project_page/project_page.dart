@@ -5,6 +5,7 @@ import 'package:tg_freelance/core/extensions/build_context_extension.dart';
 import 'package:tg_freelance/core/router/app_routes.dart';
 import 'package:tg_freelance/core/router/passing_datas.dart';
 import 'package:tg_freelance/core/status.dart';
+import 'package:tg_freelance/core/widgets/buttons.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/projects/domain/entities/proposal_entity.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
@@ -385,31 +386,20 @@ class _AuthorAndMakeProposalState extends State<_AuthorAndMakeProposal> {
               height: 8,
             ),
             SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                onPressed: isButtonAvailable
-                    ? () {
-                        projectBloc.add(
-                          ProjectSubmitProposal(
-                            coverLetter: proposal.text.trim(),
-                            entity: widget.project,
-                            // projectId: int.parse(widget.projectId),
-                          ),
-                        );
-                      }
-                    : () {},
-                child: Text(
-                  'Submit',
-                  style: context.styles.header2,
-                ),
-                style: ButtonStyle(
-                  // padding: WidgetStatePropertyAll(value),
-                  backgroundColor: isButtonAvailable
-                      ? WidgetStatePropertyAll(Colors.green)
-                      : WidgetStatePropertyAll(Colors.grey),
-                ),
-              ),
-            ),
+                height: 50,
+                child: PulseButton(
+                    isLoading: projectBloc.state.status == Status.loading,
+                    enabled: isButtonAvailable,
+                    text: 'Submit',
+                    action: () {
+                      projectBloc.add(
+                        ProjectSubmitProposal(
+                          coverLetter: proposal.text.trim(),
+                          entity: widget.project,
+                          // projectId: int.parse(widget.projectId),
+                        ),
+                      );
+                    })),
           ]
         ],
         if (!userbloc.state.isFreelancerFilled) ...[
@@ -443,20 +433,16 @@ class _EditAndProposals extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: 50,
-          width: double.infinity,
-          child: ElevatedButton(
-              style: const ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(Colors.grey)),
-              onPressed: () {
-                context.push(AppRoutes.createProject.path,
-                    extra: EditProjectData(project: project));
-              },
-              child: Text(
-                'Edit',
-                style: context.styles.body1,
-              )),
-        ),
+            height: 50,
+            width: double.infinity,
+            child: PulseButton(
+                isLoading: false,
+                enabled: true,
+                text: 'Edit',
+                action: () {
+                  context.push(AppRoutes.createProject.path,
+                      extra: EditProjectData(project: project));
+                })),
         if (project.proposals?.isNotEmpty ?? false) ...[
           const SizedBox(
             height: 16,

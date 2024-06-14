@@ -13,18 +13,14 @@ import 'package:tg_freelance/core/router/navigation_service.dart';
 import 'package:tg_freelance/core/services/directus/directus_service_impl.dart';
 import 'package:tg_freelance/core/status.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
-import 'package:tg_freelance/features/ton/presentation/bloc/ton_bloc.dart';
 import 'package:tg_freelance/features/user/domain/user_entity.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_state.dart';
 
 part 'user_event.dart';
 
 final userbloc = getIt<UserBloc>();
-final unauthorized = UserEntity(
-  dirId: 0,
-  tgId: 0,
-  userName: '',
-);
+final unauthorized =
+    UserEntity(dirId: 0, tgId: 0, userName: '', tgNickname: '');
 
 @Singleton()
 class UserBloc extends Bloc<UserEvent, UserState> {
@@ -48,7 +44,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         },
       ),
     );
-
     if (existingUser.isNotEmpty) {
       log(existingUser.first.toString());
       UserEntity user = UserEntity.fromMap(existingUser.first);
@@ -68,10 +63,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(
         state.copyWith(
           authorizedUser: UserEntity(
-            dirId: 0,
-            tgId: tgUser.id,
-            userName: userName,
-          ),
+              dirId: 0,
+              tgId: tgUser.id,
+              userName: userName,
+              tgNickname: tgUser.username),
         ),
       );
       projectBloc.add(ProjectFetchProjects());
@@ -88,15 +83,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         data: {
           'tgId': state.authorizedUser.tgId,
           'userName': event.name,
+          'tgNickname': state.authorizedUser.tgNickname
         },
       );
       emit(
         state.copyWith(
-            authorizedUser: UserEntity(
-              dirId: freshUser['id'],
-              tgId: state.authorizedUser.tgId,
-              userName: event.name,
-            ),
+            authorizedUser: UserEntity.fromMap(freshUser),
             status: Status.success),
       );
       navigationService.config.pushReplacement(AppRoutes.projects.path);

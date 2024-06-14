@@ -10,6 +10,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print('hello?');
     userbloc.add(
       UserInitEvent(
         webAppData: tg.isSupported ? tg : TelegramWebAppFake(),

@@ -14,7 +14,6 @@ import 'package:tg_freelance/features/projects/data/models/project_data_model.da
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/projects/domain/entities/proposal_entity.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_state.dart';
-import 'package:tg_freelance/features/user/domain/lite_user_entity.dart';
 import 'package:tg_freelance/features/user/domain/user_entity.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_bloc.dart';
 
@@ -53,7 +52,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     userProjects.add(updProj);
 
     emit(state.copyWith(status: Status.success, usersProjects: userProjects));
-    navigationService.config.pop();
+    navigationService.config.go(AppRoutes.projects.path);
     log('User projects: ${userProjects.length}');
   }
 
@@ -123,46 +122,6 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     emit(state.copyWith(status: Status.loading));
     UserEntity authorized = userbloc.state.authorizedUser;
     ProjectEntity incoming = event.entity;
-    // LiteUserEntity author;
-
-    // if (incoming.authorId != authorized.dirId.toString()) {
-    //   final rawAuthor = await directus.readOne(
-    //     collection: DirectusCollections.usersCollection,
-    //     id: incoming.authorId,
-    //   );
-    //   author = LiteUserEntity.fromMap(rawAuthor);
-    // } else {
-    //   author = LiteUserEntity(
-    //       dirId: authorized.dirId,
-    //       userName: authorized.userName,
-    //       userPicUrl: '',
-    //       amountOfProjects: state.usersProjects.length);
-    // }
-
-    // final rawPrj = await directus.readOne(
-    //     collection: DirectusCollections.projectsCollection, id: incoming.dirId);
-    // List<int> rawIds = List.from(rawPrj['proposals']).cast<int>();
-
-    // if (rawIds.length != incoming.proposals?.length) {
-    //   Set<int> rawSet = rawIds.toSet();
-    //   List<int> fresh = [];
-    //   List<ProposalEntity> props = [];
-
-    //   if (incoming.proposals?.isNotEmpty ?? false) {
-    //     for (ProposalEntity prop in incoming.proposals!) {
-    //       if (!rawSet.contains(prop.dirId)) {
-    //         fresh.add(prop.dirId);
-    //       }
-    //     }
-    //   } else {
-    //     fresh.addAll(rawSet.toList());
-    //   }
-    //   final maps = await fetchProposals(fresh);
-    //   for (var map in maps) {
-    //     props.add(ProposalEntity.fromMap(map));
-    //   }
-    //   incoming = incoming.copyWith(proposals: props);
-    // }
 
     navigationService.config.push(
       AppRoutes.projectPage.path,
@@ -205,7 +164,6 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     emit(state.copyWith(status: Status.loading));
 
     final ProjectDataModel model = event.projectEntity.toModel();
-
     await directus.updateOne(
         collection: DirectusCollections.projectsCollection,
         itemId: event.projectEntity.dirId,
@@ -217,7 +175,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     userPrs.add(event.projectEntity);
 
     emit(state.copyWith(status: Status.success, usersProjects: userPrs));
-    navigationService.config.go(AppRoutes.projects.path);
+    navigationService.config.pop(AppRoutes.projects.path);
     log('User projects: ${userPrs.length}');
   }
 

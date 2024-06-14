@@ -7,8 +7,6 @@ import 'package:tg_freelance/features/projects/domain/entities/project_entity.da
 import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_state.dart';
 import 'package:tg_freelance/features/projects/presentation/pages/project_tile_widget.dart';
-import 'package:tg_freelance/features/ton/presentation/bloc/ton_bloc.dart';
-import 'package:tg_freelance/features/ton/presentation/wallets_bottom_sheet.dart';
 
 class ProjectsPage extends StatefulWidget {
   const ProjectsPage({super.key});
@@ -24,11 +22,12 @@ class _ProjectsPageState extends State<ProjectsPage>
   void initState() {
     int length = projectBloc.state.tabs.length + 1;
     tabController = TabController(length: length, vsync: this);
-    if (tonBloc.state.account == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showWalletsBottomSheet(context, 'Connection lost, restore:');
-      });
-    }
+    // print(platformDefault);
+    // if (tonBloc.state.account == null) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     showWalletsBottomSheet(context, 'Connection lost, restore:');
+    //   });
+    // }
     super.initState();
   }
 
@@ -70,6 +69,8 @@ class _ProjectsPageState extends State<ProjectsPage>
       body: BlocBuilder<ProjectBloc, ProjectState>(
         bloc: projectBloc,
         builder: (context, state) {
+          int length = state.tabs.length + 1;
+          tabController = TabController(length: length, vsync: this);
           return Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 16),
