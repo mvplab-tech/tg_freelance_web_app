@@ -6,7 +6,7 @@ import 'package:tg_freelance/core/router/app_routes.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_state.dart';
-import 'package:tg_freelance/features/projects/presentation/pages/project_tile_widget.dart';
+import 'package:tg_freelance/features/projects/presentation/widgets/project_tile_widget.dart';
 
 class ProjectsPage extends StatefulWidget {
   const ProjectsPage({super.key});

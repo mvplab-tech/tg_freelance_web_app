@@ -28,6 +28,7 @@ class TonBloc extends Bloc<TonEvent, TonState> {
     on<TonConnectWallet>(_connect);
     on<TonOnConnect>(_onConnect);
     on<TonFailedConnect>(_failedConnect);
+    on<TonDisconnect>(_disconnect);
   }
 
   FutureOr<void> _init(TonInit event, Emitter<TonState> emit) async {
@@ -88,5 +89,12 @@ class TonBloc extends Bloc<TonEvent, TonState> {
   FutureOr<void> _failedConnect(
       TonFailedConnect event, Emitter<TonState> emit) {
     emit(state.copyWith(status: Status.initial));
+  }
+
+  FutureOr<void> _disconnect(TonDisconnect event, Emitter<TonState> emit) {
+    if (state.connector != null && state.connector!.connected) {
+      state.connector!.disconnect();
+      emit(state.copyWith(account: null));
+    }
   }
 }

@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tg_freelance/core/extensions/build_context_extension.dart';
 import 'package:tg_freelance/core/status.dart';
 import 'package:tg_freelance/features/ton/presentation/bloc/ton_bloc.dart';
@@ -14,7 +16,7 @@ void showWalletsBottomSheet(BuildContext context, String text) {
     builder: (context) {
       return LayoutBuilder(
         builder: (context, constraints) {
-          // String link = '';
+          String link = '';
           return SizedBox(
               width: constraints.maxWidth,
               height: constraints.maxHeight / 0.2,
@@ -80,9 +82,17 @@ void showWalletsBottomSheet(BuildContext context, String text) {
                                             .connect(wallet);
                                         // callback(generatedUrl);
                                         // print('Generated url: $generatedUrl');
-                                        if (await canLaunchUrl(
-                                            Uri.parse(generatedUrl))) {
-                                          launchUrl(Uri.parse(generatedUrl));
+                                        if (kDebugMode) {
+                                          state(
+                                            () {
+                                              link = generatedUrl;
+                                            },
+                                          );
+                                        } else {
+                                          if (await canLaunchUrl(
+                                              Uri.parse(generatedUrl))) {
+                                            launchUrl(Uri.parse(generatedUrl));
+                                          }
                                         }
                                       },
                                       child: Text(
@@ -98,17 +108,20 @@ void showWalletsBottomSheet(BuildContext context, String text) {
                                 height: 32,
                               ),
                               // Center(
-                              //   child: Container(
-                              //     color: Colors.white,
-                              //     child: QrImageView(
-                              //       data: link,
-                              //       version: QrVersions.auto,
-                              //       size: 320,
-                              //       gapless: false,
-                              //     ),
-                              //   ),
+                              //   child: ,
                               // )
-                              const Center(child: CircularProgressIndicator())
+                              Center(
+                                  child: kDebugMode
+                                      ? Container(
+                                          color: Colors.white,
+                                          child: QrImageView(
+                                            data: link,
+                                            version: QrVersions.auto,
+                                            size: 320,
+                                            gapless: false,
+                                          ),
+                                        )
+                                      : const CircularProgressIndicator())
                             ]
                           ],
                         );
@@ -120,5 +133,11 @@ void showWalletsBottomSheet(BuildContext context, String text) {
         },
       );
     },
-  );
+  ).whenComplete(() {
+    if (tonBloc.state.status == Status.loading) {
+      tonBloc.add(TonFailedConnect());
+    } else {
+      // print('connected?');
+    }
+  });
 }

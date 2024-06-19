@@ -21,3 +21,5 @@ class TonOnConnect extends TonEvent {
 }
 
 class TonFailedConnect extends TonEvent {}
+
+class TonDisconnect extends TonEvent {}

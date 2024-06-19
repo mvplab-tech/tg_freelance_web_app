@@ -11,6 +11,9 @@ import 'package:tg_freelance/features/projects/domain/entities/proposal_entity.d
 import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_state.dart';
 import 'package:tg_freelance/features/projects/presentation/widgets/proposal_tile.dart';
+import 'package:tg_freelance/features/ton/presentation/bloc/ton_bloc.dart';
+import 'package:tg_freelance/features/ton/presentation/bloc/ton_state.dart';
+import 'package:tg_freelance/features/ton/presentation/wallets_bottom_sheet.dart';
 import 'package:tg_freelance/features/user/domain/lite_user_entity.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_bloc.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_state.dart';
@@ -308,114 +311,155 @@ class _AuthorAndMakeProposalState extends State<_AuthorAndMakeProposal> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
+    return BlocBuilder<TonBloc, TonState>(
+      bloc: tonBloc,
+      builder: (context, tonState) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(
-              backgroundColor: Colors.grey,
-              child: Icon(Icons.person),
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
-                Text(
-                  'Client',
-                  style: context.styles.caption1,
+                const CircleAvatar(
+                  backgroundColor: Colors.grey,
+                  child: Icon(Icons.person),
                 ),
                 const SizedBox(
-                  height: 4,
+                  width: 8,
                 ),
-                Text(
-                  widget.author.userName,
-                  style: context.styles.body2,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Client',
+                      style: context.styles.caption1,
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      widget.author.userName,
+                      style: context.styles.body2,
+                    )
+                  ],
                 )
               ],
-            )
-          ],
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        Text(
-          '${widget.author.amountOfProjects} projects posted',
-          style: context.styles.body2,
-        ),
-        const SizedBox(
-          height: 32,
-        ),
-        if (didIRespond) ...[
-          Text(
-            'Your proposal',
-            style: context.styles.header2,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          ProposalTile(
-            prop: prop!,
-            project: null,
-            needsOnPress: false,
-          )
-        ],
-        if (!didIRespond) ...[
-          Text(
-            'Make proposal',
-            style: context.styles.header2,
-          ),
-          if (userbloc.state.isFreelancerFilled) ...[
+            ),
             const SizedBox(
               height: 8,
             ),
-            SizedBox(
-                height: 150,
-                child: TextField(
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Im great for this job because...'),
-                  maxLines: 4,
-                  maxLength: 500,
-                  controller: proposal,
-                )),
-            const SizedBox(
-              height: 8,
-            ),
-            SizedBox(
-                height: 50,
-                child: PulseButton(
-                    isLoading: projectBloc.state.status == Status.loading,
-                    enabled: isButtonAvailable,
-                    text: 'Submit',
-                    action: () {
-                      projectBloc.add(
-                        ProjectSubmitProposal(
-                          coverLetter: proposal.text.trim(),
-                          entity: widget.project,
-                          // projectId: int.parse(widget.projectId),
-                        ),
-                      );
-                    })),
-          ]
-        ],
-        if (!userbloc.state.isFreelancerFilled) ...[
-          const SizedBox(
-            height: 8,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text(
-              'Before making any proposals, you should fill out your freelancer profile',
+            Text(
+              '${widget.author.amountOfProjects} projects posted',
               style: context.styles.body2,
-              textAlign: TextAlign.center,
             ),
-          )
-        ],
-      ],
+            const SizedBox(
+              height: 32,
+            ),
+            if (didIRespond) ...[
+              Text(
+                'Your proposal',
+                style: context.styles.header2,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              ProposalTile(
+                prop: prop!,
+                project: null,
+                needsOnPress: false,
+              )
+            ],
+            if (!didIRespond) ...[
+              Text(
+                'Make proposal',
+                style: context.styles.header2,
+              ),
+              if (userbloc.state.isFreelancerFilled &&
+                  tonState.account != null &&
+                  tonState.connector != null) ...[
+                const SizedBox(
+                  height: 8,
+                ),
+                SizedBox(
+                    height: 150,
+                    child: TextField(
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Im great for this job because...'),
+                      maxLines: 4,
+                      maxLength: 500,
+                      controller: proposal,
+                    )),
+                const SizedBox(
+                  height: 8,
+                ),
+                SizedBox(
+                    height: 50,
+                    child: PulseButton(
+                        isLoading: projectBloc.state.status == Status.loading,
+                        enabled: isButtonAvailable,
+                        text: 'Submit',
+                        action: () {
+                          projectBloc.add(
+                            ProjectSubmitProposal(
+                              coverLetter: proposal.text.trim(),
+                              entity: widget.project,
+                              // projectId: int.parse(widget.projectId),
+                            ),
+                          );
+                        })),
+              ]
+            ],
+            if (!userbloc.state.isFreelancerFilled) ...[
+              const SizedBox(
+                height: 8,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Text(
+                  'Before making any proposals, you should fill out your freelancer profile',
+                  style: context.styles.body2,
+                  textAlign: TextAlign.center,
+                ),
+              )
+            ],
+            if (userbloc.state.isFreelancerFilled)
+              BlocBuilder<TonBloc, TonState>(
+                bloc: tonBloc,
+                builder: (context, state) {
+                  if (state.account != null &&
+                      state.connector != null &&
+                      state.connector!.connected) {
+                    return const SizedBox.shrink();
+                  } else {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Before creating new project, you should be connected to TON. Please, tap below.',
+                          style: context.styles.body1,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        PulseButton(
+                            isLoading: false,
+                            enabled: true,
+                            text: 'Connect',
+                            action: () {
+                              showWalletsBottomSheet(
+                                  context, 'Connect to TON:');
+                            })
+                      ],
+                    );
+                  }
+                },
+              )
+          ],
+        );
+      },
     );
   }
 }

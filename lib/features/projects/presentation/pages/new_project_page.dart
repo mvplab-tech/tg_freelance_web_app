@@ -12,6 +12,7 @@ import 'package:tg_freelance/features/projects/domain/entities/project_entity.da
 import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_state.dart';
 import 'package:tg_freelance/features/ton/presentation/bloc/ton_bloc.dart';
+import 'package:tg_freelance/features/ton/presentation/bloc/ton_state.dart';
 import 'package:tg_freelance/features/ton/presentation/wallets_bottom_sheet.dart';
 import 'package:tg_freelance/features/user/domain/lite_user_entity.dart';
 import 'package:tg_freelance/features/user/presentation/bloc/user_bloc.dart';
@@ -60,222 +61,214 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Container(
-          child: userbloc.state.isClientFilled
-              ? tonBloc.state.account != null || kDebugMode
-                  ? ListView(
-                      shrinkWrap: true,
-                      children: [
-                        Text(
-                          'Project name:',
-                          style: context.styles.body1,
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        TextField(
-                          maxLength: 150,
-                          controller: nameController,
-                          decoration: const InputDecoration(
-                              hintText: 'Develop an app, e.g.'),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Text(
-                          'Project type',
-                          style: context.styles.body1,
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Wrap(
-                          runSpacing: 8,
-                          spacing: 8,
-                          children: ProjectType.values.map((typ) {
-                            return FilterChip(
-                              label: Text(
-                                typ.getName(),
-                                style: context.styles.caption1,
-                              ),
-                              selected: type == typ,
-                              onSelected: (v) {
-                                setState(() {
-                                  type = typ;
-                                });
-                              },
-                            );
-                          }).toList(),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        if (type != null) ...[
-                          Text(
-                            'Required skills',
-                            style: context.styles.body1,
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Wrap(
+        child: BlocBuilder<TonBloc, TonState>(
+          bloc: tonBloc,
+          builder: (context, tonState) {
+            return Container(
+              child: userbloc.state.isClientFilled
+                  ? tonState.account != null || kDebugMode
+                      ? ListView(
+                          shrinkWrap: true,
+                          children: [
+                            Text(
+                              'Project name:',
+                              style: context.styles.body1,
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            TextField(
+                              maxLength: 150,
+                              controller: nameController,
+                              decoration: const InputDecoration(
+                                  hintText: 'Develop an app, e.g.'),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              'Project type',
+                              style: context.styles.body1,
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Wrap(
                               runSpacing: 8,
                               spacing: 8,
-                              children: type!.skills.map((skill) {
+                              children: ProjectType.values.map((typ) {
                                 return FilterChip(
                                   label: Text(
-                                    skill,
+                                    typ.getName(),
                                     style: context.styles.caption1,
                                   ),
-                                  selected: skills.contains(skill),
+                                  selected: type == typ,
                                   onSelected: (v) {
                                     setState(() {
-                                      skills.contains(skill)
-                                          ? skills.remove(skill)
-                                          : skills.add(skill);
+                                      type = typ;
                                     });
                                   },
                                 );
-                              }).toList()),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                        ],
-                        Text(
-                          'Required exprtise level',
-                          style: context.styles.body1,
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Wrap(
-                          runSpacing: 8,
-                          spacing: 8,
-                          children: ExpertiseLevel.values.map((exp) {
-                            return FilterChip(
-                              label: Text(
-                                exp.getName(),
-                                style: context.styles.caption1,
-                              ),
-                              selected: lvl == exp,
-                              onSelected: (v) {
-                                setState(() {
-                                  lvl = exp;
-                                });
-                              },
-                            );
-                          }).toList(),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Text(
-                          'Project budget',
-                          style: context.styles.body1,
-                        ),
-                        const SizedBox(
-                          height: 0,
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              height: 40,
-                              width: MediaQuery.sizeOf(context).width - 200,
-                              child: TextField(
-                                controller: amountController,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                              ),
+                              }).toList(),
                             ),
-                            const Text('\$\$\$')
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Text(
-                          'Project description',
-                          style: context.styles.body1,
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        TextField(
-                          controller: descriptionController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'There is an app, waiting to be done...',
-                          ),
-                          keyboardType: TextInputType.text,
-                          maxLines: 4,
-                          maxLength: 500,
-                          // controller: widget.aboutController,
-                        ),
-                        const SizedBox(
-                          height: 32,
-                        ),
-                        BlocBuilder<ProjectBloc, ProjectState>(
-                          bloc: projectBloc,
-                          builder: (context, state) {
-                            return SizedBox(
-                              height: 50,
-                              child: PulseButton(
-                                isLoading: state.status == Status.loading,
-                                enabled: butisok,
-                                text: isEdit ? 'Update' : 'Post',
-                                action: buttonAction,
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            if (type != null) ...[
+                              Text(
+                                'Required skills',
+                                style: context.styles.body1,
                               ),
-                            );
-                          },
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Wrap(
+                                  runSpacing: 8,
+                                  spacing: 8,
+                                  children: type!.skills.map((skill) {
+                                    return FilterChip(
+                                      label: Text(
+                                        skill,
+                                        style: context.styles.caption1,
+                                      ),
+                                      selected: skills.contains(skill),
+                                      onSelected: (v) {
+                                        setState(() {
+                                          skills.contains(skill)
+                                              ? skills.remove(skill)
+                                              : skills.add(skill);
+                                        });
+                                      },
+                                    );
+                                  }).toList()),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                            ],
+                            Text(
+                              'Required exprtise level',
+                              style: context.styles.body1,
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Wrap(
+                              runSpacing: 8,
+                              spacing: 8,
+                              children: ExpertiseLevel.values.map((exp) {
+                                return FilterChip(
+                                  label: Text(
+                                    exp.getName(),
+                                    style: context.styles.caption1,
+                                  ),
+                                  selected: lvl == exp,
+                                  onSelected: (v) {
+                                    setState(() {
+                                      lvl = exp;
+                                    });
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              'Project budget',
+                              style: context.styles.body1,
+                            ),
+                            const SizedBox(
+                              height: 0,
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  height: 40,
+                                  width: MediaQuery.sizeOf(context).width - 200,
+                                  child: TextField(
+                                    controller: amountController,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                  ),
+                                ),
+                                const Text('\$\$\$')
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              'Project description',
+                              style: context.styles.body1,
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            TextField(
+                              controller: descriptionController,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText:
+                                    'There is an app, waiting to be done...',
+                              ),
+                              keyboardType: TextInputType.text,
+                              maxLines: 4,
+                              maxLength: 1000,
+                              // controller: widget.aboutController,
+                            ),
+                            const SizedBox(
+                              height: 32,
+                            ),
+                            BlocBuilder<ProjectBloc, ProjectState>(
+                              bloc: projectBloc,
+                              builder: (context, state) {
+                                return SizedBox(
+                                  height: 50,
+                                  child: PulseButton(
+                                    isLoading: state.status == Status.loading,
+                                    enabled: butisok,
+                                    text: isEdit ? 'Update' : 'Post',
+                                    action: buttonAction,
+                                  ),
+                                );
+                              },
+                            )
+                          ],
                         )
-                      ],
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Before creating new project, you should be connected to TON. Please, tap below.',
-                          style: context.styles.body1,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        PulseButton(
-                            isLoading: false,
-                            enabled: true,
-                            text: 'Connect',
-                            action: () {
-                              showWalletsBottomSheet(
-                                  context, 'Connect to TON:');
-                            })
-                      ],
-                    )
-              : Center(
-                  child: Text(
-                  'Before creating new project, you should fill out your client profile.',
-                  style: context.styles.body1,
-                )),
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Before creating new project, you should be connected to TON. Please, tap below.',
+                              style: context.styles.body1,
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            PulseButton(
+                                isLoading: false,
+                                enabled: true,
+                                text: 'Connect',
+                                action: () {
+                                  showWalletsBottomSheet(
+                                      context, 'Connect to TON:');
+                                })
+                          ],
+                        )
+                  : Center(
+                      child: Text(
+                      'Before creating new project, you should fill out your client profile.',
+                      style: context.styles.body1,
+                    )),
+            );
+          },
         ),
       ),
     );
-  }
-}
-
-class _NewProjectForm extends StatefulWidget {
-  const _NewProjectForm({super.key});
-
-  @override
-  State<_NewProjectForm> createState() => __NewProjectFormState();
-}
-
-class __NewProjectFormState extends State<_NewProjectForm> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }

@@ -103,10 +103,7 @@ class _EditProfileState extends State<EditProfile>
                           const Spacer(),
                           GestureDetector(
                             onTap: () {
-                              if (state.connector != null &&
-                                  state.connector!.connected) {
-                                state.connector!.disconnect();
-                              }
+                              tonBloc.add(TonDisconnect());
                             },
                             child: Text(
                               state.connector?.connected ?? false
