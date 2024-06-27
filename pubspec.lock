@@ -212,10 +212,9 @@ packages:
   darttonconnect:
     dependency: "direct main"
     description:
-      name: darttonconnect
-      sha256: "9058b08e9ca2e7a24581ccbd15fa73ff3e2c051bc41f10228cd142eda534d73b"
-      url: "https://pub.dev"
-    source: hosted
+      path: "/Users/iaroslav/my_dartTonconnect"
+      relative: false
+    source: path
     version: "1.0.3"
   dio:
     dependency: "direct main"

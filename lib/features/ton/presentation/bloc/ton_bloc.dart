@@ -39,7 +39,13 @@ class TonBloc extends Bloc<TonEvent, TonState> {
       await connector.restoreConnection();
     }
     final List<WalletApp> wallets = await connector.getWallets();
-
+    // wallets.add(const WalletApp(
+    //   name: 'Telegram Wallet',
+    //   bridgeUrl: "https://bridge.tonapi.io/bridge",
+    //   image: "https://wallet.tg/images/logo-288.png",
+    //   aboutUrl: "https://wallet.tg/",
+    //   universalUrl: "https://t.me/wallet?attach=wallet",
+    // ));
     emit(state.copyWith(availableWallets: wallets, connector: connector));
     // print(connector.wallet?.device!.appName);
     if (connector.account != null) {

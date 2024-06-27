@@ -26,10 +26,12 @@ dependencies:
   file_picker: ^8.0.3
   open_file: ^3.3.2
   flutter_svg: ^2.0.10+1
-  darttonconnect: ^1.0.3
+  # darttonconnect: ^1.0.3
   http: ^0.13.6
   url_launcher: ^6.3.0
   qr_flutter: ^4.1.0
+  darttonconnect:
+    path: /Users/iaroslav/my_dartTonconnect
 
 dependency_overrides:
   http: ^0.13.5  

@@ -66,7 +66,7 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
           builder: (context, tonState) {
             return Container(
               child: userbloc.state.isClientFilled
-                  ? tonState.account != null || kDebugMode
+                  ? tonState.account != null || !kDebugMode
                       ? ListView(
                           shrinkWrap: true,
                           children: [
