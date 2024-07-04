@@ -38,22 +38,22 @@ class TonBloc extends Bloc<TonEvent, TonState> {
     if (!connector.connected) {
       await connector.restoreConnection();
     }
+// connector.conn
     final List<WalletApp> wallets = await connector.getWallets();
-    // wallets.add(const WalletApp(
+    // connector.connect;
+    // wallets[wallets.indexOf(wallets.firstWhere((el) => el.name == 'Wallet'))] =
+    //     const WalletApp(
     //   name: 'Telegram Wallet',
     //   bridgeUrl: "https://bridge.tonapi.io/bridge",
     //   image: "https://wallet.tg/images/logo-288.png",
     //   aboutUrl: "https://wallet.tg/",
-    //   universalUrl: "https://t.me/wallet?attach=wallet",
-    // ));
+    //   universalUrl: "https://t.me/wallet/start",
+    // );
     emit(state.copyWith(availableWallets: wallets, connector: connector));
-    // print(connector.wallet?.device!.appName);
     if (connector.account != null) {
       Account account = connector.account as Account;
       emit(state.copyWith(account: account));
     }
-
-    // connector.disconnect();
 
     connector.onStatusChange((value) async {
       add(TonOnConnect(value: value));
@@ -67,7 +67,6 @@ class TonBloc extends Bloc<TonEvent, TonState> {
       log(e.toString(), name: 'Provider listener');
       if (e.toString().contains('error')) {
         add(TonFailedConnect());
-        // emit(state.copyWith(status: Status.initial));
       }
     });
 
@@ -102,5 +101,10 @@ class TonBloc extends Bloc<TonEvent, TonState> {
       state.connector!.disconnect();
       emit(state.copyWith(account: null));
     }
+  }
+
+  Future<Uri> generateUrl(WalletApp wallet) async {
+    final generated = await state.connector!.connect(wallet);
+    return Uri.parse(generated);
   }
 }
