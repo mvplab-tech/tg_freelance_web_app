@@ -120,55 +120,58 @@ class _WalletsDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WalletApp tg = wallets.firstWhere(
-      (wallet) => wallet.name == 'Wallet',
-    );
-    bool isThereTg = wallets.contains(tg);
-    // List<WalletApp> elseWallets = wallets.remove
-    List<WalletApp> _wallets = List.from(wallets);
-    _wallets.remove(tg);
+    // WalletApp? tg = wallets.firstWhere(
+    //   (wallet) => wallet.name == 'Wallet',
+    // );
+    // bool isThereTg = wallets.contains(tg);
+    // // List<WalletApp> elseWallets = wallets.remove
+    // List<WalletApp> _wallets = List.from(wallets);
+    // _wallets.remove(tg);
 
     return Expanded(
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (isThereTg) ...[
-              GestureDetector(
-                onTap: () async {
-                  tonBloc.add(TonConnectWallet(app: tg));
-                  final generatedUrl = await tonBloc.generateUrl(tg);
-                  if (kDebugMode) {
-                    debugAction(generatedUrl);
-                  } else {
-                    if (await canLaunchUrl(generatedUrl)) {
-                      launchUrl(generatedUrl);
-                    }
-                  }
-                },
-                child: Container(
-                  height: 50,
-                  width: constraints.maxWidth - 50,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Telegram Wallet',
-                        style:
-                            context.styles.body1.copyWith(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              )
-            ],
+            ...tonBloc.state.availableWallets
+                .map((wallet) => Text(wallet.name))
+                .toList()
+            // if (isThereTg) ...[
+            //   GestureDetector(
+            //     onTap: () async {
+            //       tonBloc.add(TonConnectWallet(app: tg));
+            //       final generatedUrl = await tonBloc.generateUrl(tg);
+            //       if (kDebugMode) {
+            //         debugAction(generatedUrl);
+            //       } else {
+            //         if (await canLaunchUrl(generatedUrl)) {
+            //           launchUrl(generatedUrl);
+            //         }
+            //       }
+            //     },
+            //     child: Container(
+            //       height: 50,
+            //       width: constraints.maxWidth - 50,
+            //       decoration: BoxDecoration(
+            //         color: Colors.blue,
+            //         borderRadius: BorderRadius.circular(16),
+            //       ),
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           Text(
+            //             'Telegram Wallet',
+            //             style:
+            //                 context.styles.body1.copyWith(color: Colors.white),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            //   const SizedBox(
+            //     height: 8,
+            //   )
+            // ],
             // SingleChildScrollView(
             //   scrollDirection: Axis.horizontal,
             //   child: Row(
