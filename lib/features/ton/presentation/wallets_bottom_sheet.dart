@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:darttonconnect/models/wallet_app.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -139,6 +141,7 @@ class _WalletsDisplay extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Text('Bot version: ${tg.version}'),
             if (!thereAreWallets)
               Text(
                 'Looks like something is wrong. Try again please. Maybe with VPN.',
@@ -151,6 +154,7 @@ class _WalletsDisplay extends StatelessWidget {
                   final generatedUrl = await tonBloc.generateUrl(tgWallet);
                   if (kDebugMode) {
                     debugAction(generatedUrl);
+                    log('BOT API: ${tg.version}');
                   } else {
                     if (await canLaunchUrl(generatedUrl)) {
                       await tg.openTelegramLink(tgWallet.universalUrl!);
