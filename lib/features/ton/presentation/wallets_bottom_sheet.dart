@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:tg_freelance/core/constants/tg_consts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:tg_freelance/core/extensions/build_context_extension.dart';
 import 'package:tg_freelance/core/status.dart';
@@ -120,17 +121,17 @@ class _WalletsDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WalletApp? tg;
+    WalletApp? tgWallet;
     List<WalletApp> _wallets = List.from(wallets);
     bool isThereTg = false;
     bool thereAreWallets = wallets.isNotEmpty;
 
     if (thereAreWallets) {
-      tg = wallets.firstWhere(
+      tgWallet = wallets.firstWhere(
         (wallet) => wallet.name == 'Wallet',
       );
-      isThereTg = wallets.contains(tg);
-      _wallets.remove(tg);
+      isThereTg = wallets.contains(tgWallet);
+      _wallets.remove(tgWallet);
     }
 
     // =
@@ -149,13 +150,14 @@ class _WalletsDisplay extends StatelessWidget {
             if (isThereTg) ...[
               GestureDetector(
                 onTap: () async {
-                  tonBloc.add(TonConnectWallet(app: tg!));
-                  final generatedUrl = await tonBloc.generateUrl(tg);
+                  tonBloc.add(TonConnectWallet(app: tgWallet!));
+                  final generatedUrl = await tonBloc.generateUrl(tgWallet);
                   if (kDebugMode) {
                     debugAction(generatedUrl);
                   } else {
                     if (await canLaunchUrl(generatedUrl)) {
-                      launchUrl(generatedUrl);
+                      // launchUrl(generatedUrl);
+                      tg.openTelegramLink(generatedUrl.toString());
                     }
                   }
                 },
