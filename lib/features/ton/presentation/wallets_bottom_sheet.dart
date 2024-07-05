@@ -134,9 +134,6 @@ class _WalletsDisplay extends StatelessWidget {
       _wallets.remove(tgWallet);
     }
 
-    // =
-    // List<WalletApp> elseWallets = wallets.remove
-
     return Expanded(
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -156,7 +153,7 @@ class _WalletsDisplay extends StatelessWidget {
                     debugAction(generatedUrl);
                   } else {
                     if (await canLaunchUrl(generatedUrl)) {
-                      await tg.openTelegramLink(generatedUrl.toString());
+                      await tg.openTelegramLink(tgWallet.universalUrl!);
                     }
                   }
                 },
