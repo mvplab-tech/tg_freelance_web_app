@@ -66,7 +66,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
               dirId: 0,
               tgId: tgUser.id,
               userName: userName,
-              tgNickname: tgUser.username),
+              tgNickname: tgUser.username!),
         ),
       );
       projectBloc.add(ProjectFetchProjects());
