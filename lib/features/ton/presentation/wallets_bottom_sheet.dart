@@ -225,7 +225,10 @@ class _WalletButton extends StatelessWidget {
                       width: 60,
                       height: 60,
                       child: wallet.image.contains('mytonwallet')
-                          ? Image.asset('assets/mytonwallet.png')
+                          // ? Image.asset('assets/mytonwallet.png')
+                          ? Container(
+                              color: Colors.red,
+                            )
                           : Image.network(wallet.image)),
                 ),
                 const SizedBox(
