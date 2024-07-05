@@ -169,16 +169,16 @@ class _WalletsDisplay extends StatelessWidget {
                 height: 8,
               )
             ],
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                  children: _wallets.map((wallet) {
-                return _WalletButton(
-                    wallet: wallet,
-                    constraints: constraints,
-                    debugAction: debugAction);
-              }).toList()),
-            )
+            // SingleChildScrollView(
+            //   scrollDirection: Axis.horizontal,
+            //   child: Row(
+            //       children: _wallets.map((wallet) {
+            //     return _WalletButton(
+            //         wallet: wallet,
+            //         constraints: constraints,
+            //         debugAction: debugAction);
+            //   }).toList()),
+            // )
           ]),
     );
   }
