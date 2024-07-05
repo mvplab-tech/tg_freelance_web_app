@@ -99701,7 +99701,7 @@ while(true)switch(s){case 0:o=p.c.c
 o.toString
 n=A
 s=3
-return A.x(o.lV(a,a.a==="Wallet"?"https://t.me/mvpLab_freelance_bot":null),$async$tO)
+return A.x(o.lV(a,a.a==="Wallet"?"https://t.me/mvpLab_freelance_bot/freelance_stock":null),$async$tO)
 case 3:q=n.d2(c,0,null)
 s=1
 break

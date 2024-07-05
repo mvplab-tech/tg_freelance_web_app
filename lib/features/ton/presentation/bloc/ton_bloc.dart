@@ -104,8 +104,11 @@ class TonBloc extends Bloc<TonEvent, TonState> {
   }
 
   Future<Uri> generateUrl(WalletApp wallet) async {
-    final generated = await state.connector!.connect(wallet,
-        wallet.name == 'Wallet' ? 'https://t.me/mvpLab_freelance_bot' : null);
+    final generated = await state.connector!.connect(
+        wallet,
+        wallet.name == 'Wallet'
+            ? 'https://t.me/mvpLab_freelance_bot/freelance_stock'
+            : null);
     log(generated);
     return Uri.parse(generated);
   }
