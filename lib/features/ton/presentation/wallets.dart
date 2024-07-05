@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tg_freelance/features/ton/presentation/bloc/ton_bloc.dart';
 import 'package:tg_freelance/features/ton/presentation/bloc/ton_state.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class Wallets extends StatefulWidget {
   const Wallets({super.key});

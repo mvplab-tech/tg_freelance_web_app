@@ -32,7 +32,6 @@ dependencies:
   qr_flutter: ^4.1.0
   darttonconnect:
     path: /Users/iaroslav/my_dartTonconnect
-  flutter_emoji: ^2.5.1
 
 dependency_overrides:
   http: ^0.13.5  
