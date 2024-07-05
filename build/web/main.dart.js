@@ -99845,10 +99845,14 @@ o.F(0,new A.p5())
 s=2
 return A.x(o.tO(n.a),$async$$0)
 case 2:p=b
-s=3
+s=5
 return A.x(A.a4l(p),$async$$0)
-case 3:if(b){$.a4I()
-Telegram.WebApp.openTelegramLink(p.j(0))}return A.A(null,r)}})
+case 5:s=b?3:4
+break
+case 3:$.a4I()
+s=6
+return A.x(Telegram.WebApp.openTelegramLink(p.j(0)),$async$$0)
+case 6:case 4:return A.A(null,r)}})
 return A.B($async$$0,r)},
 $S:18}
 A.azv.prototype={

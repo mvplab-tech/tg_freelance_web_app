@@ -157,7 +157,8 @@ class _WalletsDisplay extends StatelessWidget {
                   } else {
                     if (await canLaunchUrl(generatedUrl)) {
                       // launchUrl(generatedUrl);
-                      tg.openTelegramLink(generatedUrl.toString());
+                      // tg.
+                      await tg.openTelegramLink(generatedUrl.toString());
                     }
                   }
                 },

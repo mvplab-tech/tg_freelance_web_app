@@ -6,6 +6,7 @@ import 'package:darttonconnect/parsers/connect_event.dart';
 import 'package:darttonconnect/ton_connect.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
+import 'package:tg_freelance/core/constants/tg_consts.dart';
 import 'package:tg_freelance/core/di/injectable.dart';
 import 'package:tg_freelance/core/router/navigation_service.dart';
 import 'package:tg_freelance/core/status.dart';
@@ -110,6 +111,7 @@ class TonBloc extends Bloc<TonEvent, TonState> {
             ? 'https://t.me/mvpLab_freelance_bot/freelance_stock'
             : null);
     log(generated);
+
     return Uri.parse(generated);
   }
 }
