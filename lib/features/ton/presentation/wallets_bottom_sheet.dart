@@ -222,14 +222,18 @@ class _WalletButton extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: wallet.image.contains('mytonwallet')
-                          // ? Image.asset('assets/mytonwallet.png')
-                          ? Container(
-                              color: Colors.red,
-                            )
-                          : Image.network(wallet.image)),
+                    width: 60,
+                    height: 60,
+                    child: Container(
+                      color: Colors.amber,
+                    ),
+                    // child: wallet.image.contains('mytonwallet')
+                    //     // ? Image.asset('assets/mytonwallet.png')
+                    //     ? Container(
+                    //         color: Colors.red,
+                    //       )
+                    //     : Image.network(wallet.image),
+                  ),
                 ),
                 const SizedBox(
                   height: 4,
