@@ -120,68 +120,78 @@ class _WalletsDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // WalletApp? tg = wallets.firstWhere(
-    //   (wallet) => wallet.name == 'Wallet',
-    // );
-    // bool isThereTg = wallets.contains(tg);
-    // // List<WalletApp> elseWallets = wallets.remove
-    // List<WalletApp> _wallets = List.from(wallets);
-    // _wallets.remove(tg);
+    WalletApp? tg;
+    List<WalletApp> _wallets = List.from(wallets);
+    bool isThereTg = false;
+    bool thereAreWallets = wallets.isNotEmpty;
+
+    if (thereAreWallets) {
+      tg = wallets.firstWhere(
+        (wallet) => wallet.name == 'Wallet',
+      );
+      isThereTg = wallets.contains(tg);
+      _wallets.remove(tg);
+    }
+
+    // =
+    // List<WalletApp> elseWallets = wallets.remove
 
     return Expanded(
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ...tonBloc.state.availableWallets
-                .map((wallet) => Text(wallet.name))
-                .toList()
-            // if (isThereTg) ...[
-            //   GestureDetector(
-            //     onTap: () async {
-            //       tonBloc.add(TonConnectWallet(app: tg));
-            //       final generatedUrl = await tonBloc.generateUrl(tg);
-            //       if (kDebugMode) {
-            //         debugAction(generatedUrl);
-            //       } else {
-            //         if (await canLaunchUrl(generatedUrl)) {
-            //           launchUrl(generatedUrl);
-            //         }
-            //       }
-            //     },
-            //     child: Container(
-            //       height: 50,
-            //       width: constraints.maxWidth - 50,
-            //       decoration: BoxDecoration(
-            //         color: Colors.blue,
-            //         borderRadius: BorderRadius.circular(16),
-            //       ),
-            //       child: Row(
-            //         mainAxisAlignment: MainAxisAlignment.center,
-            //         children: [
-            //           Text(
-            //             'Telegram Wallet',
-            //             style:
-            //                 context.styles.body1.copyWith(color: Colors.white),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            //   const SizedBox(
-            //     height: 8,
-            //   )
-            // ],
-            // SingleChildScrollView(
-            //   scrollDirection: Axis.horizontal,
-            //   child: Row(
-            //       children: _wallets.map((wallet) {
-            //     return _WalletButton(
-            //         wallet: wallet,
-            //         constraints: constraints,
-            //         debugAction: debugAction);
-            //   }).toList()),
-            // )
+            if (!thereAreWallets)
+              Text(
+                'Looks like something is wrong. Try again please. Maybe with VPN.',
+                style: context.styles.body2.copyWith(color: Colors.white),
+              ),
+            if (isThereTg) ...[
+              GestureDetector(
+                onTap: () async {
+                  tonBloc.add(TonConnectWallet(app: tg!));
+                  final generatedUrl = await tonBloc.generateUrl(tg);
+                  if (kDebugMode) {
+                    debugAction(generatedUrl);
+                  } else {
+                    if (await canLaunchUrl(generatedUrl)) {
+                      launchUrl(generatedUrl);
+                    }
+                  }
+                },
+                child: Container(
+                  height: 50,
+                  width: constraints.maxWidth - 50,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Telegram Wallet',
+                        style:
+                            context.styles.body1.copyWith(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              )
+            ],
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                  children: _wallets.map((wallet) {
+                return _WalletButton(
+                    wallet: wallet,
+                    constraints: constraints,
+                    debugAction: debugAction);
+              }).toList()),
+            )
           ]),
     );
   }
