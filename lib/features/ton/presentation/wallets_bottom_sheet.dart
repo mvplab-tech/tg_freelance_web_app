@@ -157,7 +157,9 @@ class _WalletsDisplay extends StatelessWidget {
                     log('BOT API: ${tg.version}');
                   } else {
                     if (await canLaunchUrl(generatedUrl)) {
-                      await tg.openTelegramLink(tgWallet.universalUrl!);
+                      // await tg.openTelegramLink(tgWallet.universalUrl!);
+                      await tg.openTelegramLink(
+                          'https://t.me/RaqamliDokonBot/RaqamliDokon?startapp=m1000');
                     }
                   }
                 },

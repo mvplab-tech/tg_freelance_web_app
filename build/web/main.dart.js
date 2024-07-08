@@ -99429,10 +99429,8 @@ return A.w(n.a41(b),$async$$0)
 case 4:s=b?2:3
 break
 case 2:$.Li()
-p=o.a.d
-p.toString
 s=6
-return A.w(Telegram.WebApp.openTelegramLink(p),$async$$0)
+return A.w(Telegram.WebApp.openTelegramLink("https://t.me/RaqamliDokonBot/RaqamliDokon?startapp=m1000"),$async$$0)
 case 6:case 3:return A.B(null,r)}})
 return A.C($async$$0,r)},
 $S:18}
