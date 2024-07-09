@@ -99428,11 +99428,11 @@ s=5
 return A.w(A.a41(p),$async$$0)
 case 5:s=b?3:4
 break
-case 3:$.Lj()
+case 3:A.AE(new A.q5(p.j(0)))
+$.Lj()
 s=6
-return A.w(Telegram.WebApp.openTelegramLink("https://t.me/wallet/start?attach=wallet"),$async$$0)
-case 6:A.AE(new A.q5(p.j(0)))
-case 4:return A.B(null,r)}})
+return A.w(Telegram.WebApp.openTelegramLink(p.j(0)),$async$$0)
+case 6:case 4:return A.B(null,r)}})
 return A.C($async$$0,r)},
 $S:18}
 A.az8.prototype={

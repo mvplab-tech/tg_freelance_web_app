@@ -160,11 +160,11 @@ class _WalletsDisplay extends StatelessWidget {
                   } else {
                     if (await canLaunchUrl(generatedUrl)) {
                       // tg.send
-                      await tg.openTelegramLink(
-                          'https://t.me/wallet/start?attach=wallet');
+                      // await tg.openTelegramLink(
+                      // 'https://t.me/wallet/start?attach=wallet');
                       Clipboard.setData(
                           ClipboardData(text: generatedUrl.toString()));
-                      // await tg.openTelegramLink(tgWallet.universalUrl!);
+                      await tg.openTelegramLink(generatedUrl.toString());
                       // await tg.openTelegramLink(
                       //     'https://t.me/RaqamliDokonBot/RaqamliDokon?startapp=m1000');
                     }
