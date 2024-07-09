@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:darttonconnect/models/wallet_app.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tg_freelance/core/constants/tg_consts.dart';
@@ -159,7 +160,11 @@ class _WalletsDisplay extends StatelessWidget {
                   } else {
                     if (await canLaunchUrl(generatedUrl)) {
                       // tg.send
-                      await tg.openTelegramLink(tgWallet.universalUrl!);
+                      await tg.openTelegramLink(
+                          'https://t.me/wallet/start?attach=wallet');
+                      Clipboard.setData(
+                          ClipboardData(text: generatedUrl.toString()));
+                      // await tg.openTelegramLink(tgWallet.universalUrl!);
                       // await tg.openTelegramLink(
                       //     'https://t.me/RaqamliDokonBot/RaqamliDokon?startapp=m1000');
                     }
