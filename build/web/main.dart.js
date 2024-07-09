@@ -51137,7 +51137,7 @@ p===$&&A.a()
 p=p.b
 p===$&&A.a()
 if(q.b.a!=="Wallet")return a+"?v=2&id="+p+"&r="+A.nd(B.kt,B.J.lY(b,null),B.K,!1)
-else{s=a+"?startapp=m1000&startattach="+("tonconnect-"+q.RK("v=2&id="+p+"&r="+A.nd(B.kt,B.J.lY(b,null),B.K,!1)))
+else{s="https://t.me/wallet/start?attach=wallet&startattach="+("tonconnect-"+q.RK("v=2&id="+p+"&r="+A.nd(B.kt,B.J.lY(b,null),B.K,!1)))
 if(c!=null){r=A.nd(B.kt,B.J.lY(c,null),B.K,!1)
 s=s+"-"+q.RK("ret="+B.c.S(r,3,r.length-3))}return s}},
 Ga(){var s=this.d
