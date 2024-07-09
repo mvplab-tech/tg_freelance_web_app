@@ -51137,7 +51137,7 @@ p===$&&A.a()
 p=p.b
 p===$&&A.a()
 if(q.b.a!=="Wallet")return a+"?v=2&id="+p+"&r="+A.nd(B.kt,B.J.lY(b,null),B.K,!1)
-else{s=a+"&startattach="+("tonconnect-"+q.RK("v=2&id="+p+"&r="+A.nd(B.kt,B.J.lY(b,null),B.K,!1)))
+else{s=a+"?startapp=m1000&startattach="+("tonconnect-"+q.RK("v=2&id="+p+"&r="+A.nd(B.kt,B.J.lY(b,null),B.K,!1)))
 if(c!=null){r=A.nd(B.kt,B.J.lY(c,null),B.K,!1)
 s=s+"-"+q.RK("ret="+B.c.S(r,3,r.length-3))}return s}},
 Ga(){var s=this.d
@@ -99429,8 +99429,10 @@ return A.w(n.a41(b),$async$$0)
 case 4:s=b?2:3
 break
 case 2:$.Li()
+p=o.a.d
+p.toString
 s=6
-return A.w(Telegram.WebApp.openTelegramLink("https://t.me/RaqamliDokonBot/RaqamliDokon?startapp=m1000"),$async$$0)
+return A.w(Telegram.WebApp.openTelegramLink(p),$async$$0)
 case 6:case 3:return A.B(null,r)}})
 return A.C($async$$0,r)},
 $S:18}
