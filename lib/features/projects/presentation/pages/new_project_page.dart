@@ -8,6 +8,8 @@ import 'package:tg_freelance/core/extensions/build_context_extension.dart';
 import 'package:tg_freelance/core/router/passing_datas.dart';
 import 'package:tg_freelance/core/status.dart';
 import 'package:tg_freelance/core/widgets/buttons.dart';
+import 'package:tg_freelance/core/widgets/card.dart';
+import 'package:tg_freelance/core/widgets/text_field.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_state.dart';
@@ -40,11 +42,12 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
       appBar: AppBar(
         title: Text(
           isEdit ? 'Edit project' : 'New project',
-          style: context.styles.header2,
+          style: context.styles.title3,
         ),
         elevation: 0,
         centerTitle: false,
         automaticallyImplyLeading: true,
+        // color
         actions: isEdit
             ? [
                 IconButton(
@@ -60,7 +63,7 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
             : null,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: BlocBuilder<TonBloc, TonState>(
           bloc: tonBloc,
           builder: (context, tonState) {
@@ -70,154 +73,145 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
                       ? ListView(
                           shrinkWrap: true,
                           children: [
-                            Text(
-                              'Project name:',
-                              style: context.styles.body1,
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            TextField(
-                              maxLength: 150,
-                              controller: nameController,
-                              decoration: const InputDecoration(
-                                  hintText: 'Develop an app, e.g.'),
+                            DisplayWidget(
+                              label: 'Project name:',
+                              child: PulseTextField(
+                                hintText: 'Develop an app, e.g.',
+                                controller: nameController,
+                                height: 50,
+                                showCounter: false,
+                                maxLength: 150,
+                                maxLines: 1,
+                              ),
                             ),
                             const SizedBox(
                               height: 16,
                             ),
-                            Text(
-                              'Project type',
-                              style: context.styles.body1,
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Wrap(
-                              runSpacing: 8,
-                              spacing: 8,
-                              children: ProjectType.values.map((typ) {
-                                return FilterChip(
-                                  label: Text(
-                                    typ.getName(),
-                                    style: context.styles.caption1,
-                                  ),
-                                  selected: type == typ,
-                                  onSelected: (v) {
-                                    setState(() {
-                                      type = typ;
-                                    });
-                                  },
-                                );
-                              }).toList(),
+                            DisplayWidget(
+                              label: 'Project Type',
+                              child: Wrap(
+                                runSpacing: 8,
+                                spacing: 8,
+                                children: ProjectType.values.map((typ) {
+                                  return FilterChip(
+                                    selectedColor: const Color(0xff007AFF)
+                                        .withOpacity(0.3),
+                                    label: Text(
+                                      typ.getName(),
+                                      style: context.styles.caption1,
+                                    ),
+                                    selected: type == typ,
+                                    onSelected: (v) {
+                                      setState(() {
+                                        type = typ;
+                                      });
+                                    },
+                                  );
+                                }).toList(),
+                              ),
                             ),
                             const SizedBox(
                               height: 16,
                             ),
                             if (type != null) ...[
-                              Text(
-                                'Required skills',
-                                style: context.styles.body1,
+                              DisplayWidget(
+                                label: 'Required skills',
+                                child: Wrap(
+                                    runSpacing: 8,
+                                    spacing: 8,
+                                    children: type!.skills.map((skill) {
+                                      return FilterChip(
+                                        selectedColor: const Color(0xff007AFF)
+                                            .withOpacity(0.3),
+                                        label: Text(
+                                          skill,
+                                          style: context.styles.caption1,
+                                        ),
+                                        selected: skills.contains(skill),
+                                        onSelected: (v) {
+                                          setState(() {
+                                            skills.contains(skill)
+                                                ? skills.remove(skill)
+                                                : skills.add(skill);
+                                          });
+                                        },
+                                      );
+                                    }).toList()),
                               ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Wrap(
-                                  runSpacing: 8,
-                                  spacing: 8,
-                                  children: type!.skills.map((skill) {
-                                    return FilterChip(
-                                      label: Text(
-                                        skill,
-                                        style: context.styles.caption1,
-                                      ),
-                                      selected: skills.contains(skill),
-                                      onSelected: (v) {
-                                        setState(() {
-                                          skills.contains(skill)
-                                              ? skills.remove(skill)
-                                              : skills.add(skill);
-                                        });
-                                      },
-                                    );
-                                  }).toList()),
                               const SizedBox(
                                 height: 16,
                               ),
                             ],
-                            Text(
-                              'Required exprtise level',
-                              style: context.styles.body1,
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Wrap(
-                              runSpacing: 8,
-                              spacing: 8,
-                              children: ExpertiseLevel.values.map((exp) {
-                                return FilterChip(
-                                  label: Text(
-                                    exp.getName(),
-                                    style: context.styles.caption1,
-                                  ),
-                                  selected: lvl == exp,
-                                  onSelected: (v) {
-                                    setState(() {
-                                      lvl = exp;
-                                    });
-                                  },
-                                );
-                              }).toList(),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Text(
-                              'Project budget',
-                              style: context.styles.body1,
-                            ),
-                            const SizedBox(
-                              height: 0,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(
-                                  height: 40,
-                                  width: MediaQuery.sizeOf(context).width - 200,
-                                  child: TextField(
-                                    controller: amountController,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.digitsOnly,
-                                    ],
-                                  ),
-                                ),
-                                const Text('\$\$\$')
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Text(
-                              'Project description',
-                              style: context.styles.body1,
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            TextField(
-                              controller: descriptionController,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                hintText:
-                                    'There is an app, waiting to be done...',
+                            DisplayWidget(
+                              label: 'Required exprtise level',
+                              child: Wrap(
+                                runSpacing: 8,
+                                spacing: 8,
+                                children: ExpertiseLevel.values.map((exp) {
+                                  return FilterChip(
+                                    selectedColor: const Color(0xff007AFF)
+                                        .withOpacity(0.3),
+                                    label: Text(
+                                      exp.getName(),
+                                      style: context.styles.caption1,
+                                    ),
+                                    selected: lvl == exp,
+                                    onSelected: (v) {
+                                      setState(() {
+                                        lvl = exp;
+                                      });
+                                    },
+                                  );
+                                }).toList(),
                               ),
-                              keyboardType: TextInputType.text,
-                              maxLines: 4,
-                              maxLength: 1000,
-                              // controller: widget.aboutController,
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            DisplayWidget(
+                              label: 'Project budget',
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    height: 40,
+                                    width:
+                                        MediaQuery.sizeOf(context).width - 200,
+                                    child: PulseTextField(
+                                      hintText: '',
+                                      controller: amountController,
+                                      inputType: TextInputType.number,
+                                      height: 40,
+                                      showCounter: false,
+                                      maxLength: 150,
+                                      maxLines: 1,
+                                      formatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    '\$\$\$',
+                                    style: context.styles.title2,
+                                  )
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            DisplayWidget(
+                              label: 'Project description',
+                              child: PulseTextField(
+                                  inputType: TextInputType.text,
+                                  maxLines: 4,
+                                  maxLength: 1000,
+                                  hintText:
+                                      'There is an app, waiting to be done...',
+                                  controller: descriptionController),
                             ),
                             const SizedBox(
                               height: 32,
@@ -235,7 +229,10 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
                                   ),
                                 );
                               },
-                            )
+                            ),
+                            const SizedBox(
+                              height: 80,
+                            ),
                           ],
                         )
                       : Column(
@@ -244,7 +241,7 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
                           children: [
                             Text(
                               'Before creating new project, you should be connected to TON. Please, tap below.',
-                              style: context.styles.body1,
+                              style: context.styles.body,
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(
@@ -263,7 +260,7 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
                   : Center(
                       child: Text(
                       'Before creating new project, you should fill out your client profile.',
-                      style: context.styles.body1,
+                      style: context.styles.body,
                     )),
             );
           },

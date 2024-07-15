@@ -23,27 +23,37 @@ class PulseButton extends StatefulWidget {
 class _PulseButtonState extends State<PulseButton> {
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
-      onPressed: widget.enabled && !widget.isLoading ? widget.action : () {},
-      style: ButtonStyle(
-        backgroundColor: widget.enabled
-            ? WidgetStatePropertyAll(
-                Colors.green[200],
+    return SizedBox(
+      height: 40,
+      width: 150,
+      child: OutlinedButton(
+        onPressed: widget.enabled && !widget.isLoading ? widget.action : () {},
+        style: ButtonStyle(
+          side: const WidgetStatePropertyAll(
+            BorderSide.none,
+          ),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          backgroundColor: widget.enabled
+              ? const WidgetStatePropertyAll(Color(0xff007AFF))
+              : WidgetStatePropertyAll(
+                  Colors.grey[400],
+                ),
+        ),
+        child: !widget.isLoading
+            ? Text(
+                widget.text,
+                style: context.styles.body.copyWith(
+                    color: widget.enabled ? Colors.white : Colors.black26),
               )
-            : WidgetStatePropertyAll(
-                Colors.grey[400],
+            : const CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.black,
               ),
       ),
-      child: !widget.isLoading
-          ? Text(
-              widget.text,
-              style: context.styles.body1.copyWith(
-                  color: widget.enabled ? Colors.black : Colors.black26),
-            )
-          : const CircularProgressIndicator(
-              strokeWidth: 2,
-              color: Colors.black,
-            ),
     );
   }
 }

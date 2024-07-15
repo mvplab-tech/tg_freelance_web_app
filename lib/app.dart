@@ -1,15 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:tg_freelance/core/constants/styles/text_styles.dart';
+import 'package:tg_freelance/core/constants/styles/theme.dart';
 import 'package:tg_freelance/core/router/navigation_service.dart';
 
 final _routerConfig = navigationService.config;
 
 class Pulse extends StatelessWidget {
-  final ThemeData theme;
   const Pulse({
     Key? key,
-    required this.theme,
   }) : super(key: key);
 
   @override
@@ -17,12 +16,17 @@ class Pulse extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Pulse',
-      theme: theme.copyWith(extensions: <ThemeExtension>[
+      theme: PulseTheme.lightTheme.copyWith(extensions: <ThemeExtension>[
         AppTextStyles(
-          header1: appTextStyles.header1,
-          header2: appTextStyles.header2,
-          body1: appTextStyles.body1,
-          body2: appTextStyles.body2,
+          title1: appTextStyles.title1,
+          title2: appTextStyles.title2,
+          title3: appTextStyles.title3,
+          headline: appTextStyles.headline,
+          body: appTextStyles.body,
+          callout: appTextStyles.callout,
+          subheadline1: appTextStyles.subheadline1,
+          subheadline2: appTextStyles.subheadline2,
+          footnote: appTextStyles.footnote,
           caption1: appTextStyles.caption1,
           caption2: appTextStyles.caption2,
         ),

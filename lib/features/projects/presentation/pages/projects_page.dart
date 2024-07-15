@@ -43,7 +43,7 @@ class _ProjectsPageState extends State<ProjectsPage>
       appBar: AppBar(
         title: Text(
           'Projects',
-          style: context.styles.header2,
+          style: context.styles.title3,
         ),
         centerTitle: false,
         actions: [
@@ -57,13 +57,21 @@ class _ProjectsPageState extends State<ProjectsPage>
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.push(AppRoutes.createProject.path);
-        },
-        child: Text(
-          '+',
-          style: context.styles.header2,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: SizedBox(
+        width: 285,
+        height: 50,
+        child: FloatingActionButton(
+          backgroundColor: const Color(0xff007AFF),
+          foregroundColor: Colors.white,
+          isExtended: true,
+          onPressed: () {
+            context.push(AppRoutes.createProject.path);
+          },
+          child: Text(
+            'Add project',
+            style: context.styles.headline.copyWith(color: Colors.white),
+          ),
         ),
       ),
       body: BlocBuilder<ProjectBloc, ProjectState>(
@@ -71,52 +79,48 @@ class _ProjectsPageState extends State<ProjectsPage>
         builder: (context, state) {
           int length = state.tabs.length + 1;
           tabController = TabController(length: length, vsync: this);
-          return Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 16),
-            child: Column(
-              children: [
-                if (state.tabs.isNotEmpty)
-                  TabBar(
-                    controller: tabController,
-                    tabs: [
-                      const Tab(
-                        text: 'All Projects',
-                      ),
-                      ...state.tabs
-                    ],
-                  ),
-                const SizedBox(
-                  height: 16,
+          return Column(
+            children: [
+              if (state.tabs.isNotEmpty)
+                TabBar(
+                  controller: tabController,
+                  tabs: [
+                    const Tab(
+                      text: 'All Projects',
+                    ),
+                    ...state.tabs
+                  ],
                 ),
-                Expanded(
-                  child: TabBarView(
-                    controller: tabController,
-                    children: [
-                      _AllProjects(
-                        prs: state.available,
+              // const SizedBox(
+              //   height: 16,
+              // ),
+              Expanded(
+                child: TabBarView(
+                  controller: tabController,
+                  children: [
+                    _AllProjects(
+                      prs: state.available,
+                    ),
+                    if (state.usersProjects.isNotEmpty)
+                      ListView.builder(
+                        itemCount: state.usersProjects.length,
+                        itemBuilder: (context, index) {
+                          return ProjectTile(
+                              entity: state.usersProjects[index]);
+                        },
                       ),
-                      if (state.usersProjects.isNotEmpty)
-                        ListView.builder(
-                          itemCount: state.usersProjects.length,
-                          itemBuilder: (context, index) {
-                            return ProjectTile(
-                                entity: state.usersProjects[index]);
-                          },
-                        ),
-                      if (state.userResponses.isNotEmpty)
-                        ListView.builder(
-                          itemCount: state.userResponses.length,
-                          itemBuilder: (context, index) {
-                            return ProjectTile(
-                                entity: state.userResponses[index]);
-                          },
-                        ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    if (state.userResponses.isNotEmpty)
+                      ListView.builder(
+                        itemCount: state.userResponses.length,
+                        itemBuilder: (context, index) {
+                          return ProjectTile(
+                              entity: state.userResponses[index]);
+                        },
+                      ),
+                  ],
+                ),
+              )
+            ],
           );
         },
       ),

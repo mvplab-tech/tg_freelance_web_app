@@ -65,7 +65,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               children: [
                 Text(
                   'Hello there,',
-                  style: context.styles.header1,
+                  style: context.styles.title1,
                 ),
                 const SizedBox(
                   width: 8,
@@ -73,7 +73,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 Expanded(
                   child: TextField(
                     controller: nameController,
-                    style: context.styles.header1
+                    style: context.styles.title1
                         .copyWith(decoration: TextDecoration.underline),
                     decoration: const InputDecoration(
                       border: InputBorder.none,

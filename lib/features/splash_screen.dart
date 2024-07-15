@@ -22,7 +22,7 @@ class SplashScreen extends StatelessWidget {
       body: Center(
         child: Text(
           'Pulse',
-          style: context.styles.header1,
+          style: context.styles.title1,
         ),
       ),
     );

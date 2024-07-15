@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tg_freelance/core/extensions/build_context_extension.dart';
 import 'package:tg_freelance/core/status.dart';
 import 'package:tg_freelance/core/widgets/buttons.dart';
+import 'package:tg_freelance/core/widgets/card.dart';
+import 'package:tg_freelance/core/widgets/text_field.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/ton/presentation/bloc/ton_bloc.dart';
 import 'package:tg_freelance/features/ton/presentation/bloc/ton_state.dart';
@@ -43,7 +45,7 @@ class _EditProfileState extends State<EditProfile>
       appBar: AppBar(
         title: Text(
           'My profile',
-          style: context.styles.header2,
+          style: context.styles.title2,
         ),
         centerTitle: false,
       ),
@@ -51,7 +53,7 @@ class _EditProfileState extends State<EditProfile>
         bloc: userbloc,
         builder: (context, state) {
           return Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -69,57 +71,53 @@ class _EditProfileState extends State<EditProfile>
                 const SizedBox(
                   height: 16,
                 ),
-
-                Text(
-                  'My name',
-                  style: context.styles.body1,
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                      hintText: 'Current: ${state.authorizedUser.userName}'),
+                DisplayWidget(
+                  label: 'My name',
+                  child: PulseTextField(
+                    height: 50,
+                    maxLength: 100,
+                    showCounter: false,
+                    maxLines: 1,
+                    hintText: 'Current: ${state.authorizedUser.userName}',
+                    controller: nameController,
+                  ),
                 ),
                 const SizedBox(
                   height: 16,
                 ),
-                Text(
-                  'TON connection:',
-                  style: context.styles.body1,
-                ),
-                BlocBuilder<TonBloc, TonState>(
-                  bloc: tonBloc,
-                  builder: (context, state) {
-                    return SizedBox(
-                      height: 50,
-                      child: Row(
-                        children: [
-                          Text(
-                            'Status:',
-                            style: context.styles.body2,
+                DisplayWidget(
+                    label: 'TON connection',
+                    child: BlocBuilder<TonBloc, TonState>(
+                      bloc: tonBloc,
+                      builder: (context, state) {
+                        return SizedBox(
+                          height: 50,
+                          child: Row(
+                            children: [
+                              Text(
+                                'Status:',
+                                style: context.styles.body,
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  tonBloc.add(TonDisconnect());
+                                },
+                                child: Text(
+                                  state.connector?.connected ?? false
+                                      ? 'Connected with ${state.connector!.wallet?.device!.appName}'
+                                      : "Disconnected",
+                                  style: context.styles.body.copyWith(
+                                      color: state.connector?.connected ?? false
+                                          ? Colors.green
+                                          : Colors.red),
+                                ),
+                              ),
+                            ],
                           ),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              tonBloc.add(TonDisconnect());
-                            },
-                            child: Text(
-                              state.connector?.connected ?? false
-                                  ? 'Connected with: ${state.connector!.wallet?.device!.appName}'
-                                  : "Disconnected",
-                              style: context.styles.body2.copyWith(
-                                  color: state.connector?.connected ?? false
-                                      ? Colors.green
-                                      : Colors.red),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                        );
+                      },
+                    )),
                 const SizedBox(
                   height: 16,
                 ),
@@ -140,16 +138,12 @@ class _EditProfileState extends State<EditProfile>
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                // if (isButtonAvailable)
                 SizedBox(
                   height: 50,
                   child: PulseButton(
                     isLoading: state.status == Status.loading,
                     enabled: isButtonAvailable,
-                    text: 'update',
+                    text: 'Update',
                     action: buttonAction,
                   ),
                 )
@@ -205,118 +199,98 @@ class __FreelanceTabState extends State<_FreelanceTab> {
         return ListView(
           shrinkWrap: true,
           children: [
-            Text(
-              'I am',
-              style: context.styles.body1,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            DropdownMenu(
-              enableSearch: false,
-              expandedInsets: const EdgeInsets.all(0),
-              initialSelection: profession?.name,
-              menuHeight: 300,
-              onSelected: (value) {
-                setState(() {
-                  profession = ProjectType.values.byName(value as String);
-                });
-                widget.onProfession(profession!);
-              },
-              dropdownMenuEntries: ProjectType.values
-                  .map((item) {
-                    return DropdownMenuEntry(
-                        value: item.name, label: item.getOccupation());
-                  })
-                  .toList()
-                  .cast<DropdownMenuEntry<String>>(),
-            ),
+            DisplayWidget(
+                label: 'I am',
+                child: DropdownMenu(
+                  enableSearch: false,
+                  expandedInsets: const EdgeInsets.all(0),
+                  initialSelection: profession?.name,
+                  menuHeight: 300,
+                  onSelected: (value) {
+                    setState(() {
+                      profession = ProjectType.values.byName(value as String);
+                    });
+                    widget.onProfession(profession!);
+                  },
+                  dropdownMenuEntries: ProjectType.values
+                      .map((item) {
+                        return DropdownMenuEntry(
+                            value: item.name, label: item.getOccupation());
+                      })
+                      .toList()
+                      .cast<DropdownMenuEntry<String>>(),
+                )),
             const SizedBox(
               height: 16,
             ),
-            Text(
-              'Experience',
-              style: context.styles.body1,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            DropdownMenu(
-              enableSearch: false,
-              expandedInsets: const EdgeInsets.all(0),
-              menuHeight: 300,
-              enabled: profession != null,
-              initialSelection: expertiseLevel?.name,
-              onSelected: (value) {
-                setState(() {
-                  expertiseLevel =
-                      ExpertiseLevel.values.byName(value as String);
-                });
-                widget.onExpertise(expertiseLevel!);
-              },
-              dropdownMenuEntries: ExpertiseLevel.values
-                  .map((item) {
-                    return DropdownMenuEntry(
-                      value: item.name,
-                      label: item.getDescription(),
-                    );
-                  })
-                  .toList()
-                  .cast<DropdownMenuEntry<String>>(),
-            ),
+            DisplayWidget(
+                label: 'Experience',
+                child: DropdownMenu(
+                  enableSearch: false,
+                  expandedInsets: const EdgeInsets.all(0),
+                  menuHeight: 300,
+                  enabled: profession != null,
+                  initialSelection: expertiseLevel?.name,
+                  onSelected: (value) {
+                    setState(() {
+                      expertiseLevel =
+                          ExpertiseLevel.values.byName(value as String);
+                    });
+                    widget.onExpertise(expertiseLevel!);
+                  },
+                  dropdownMenuEntries: ExpertiseLevel.values
+                      .map((item) {
+                        return DropdownMenuEntry(
+                          value: item.name,
+                          label: item.getDescription(),
+                        );
+                      })
+                      .toList()
+                      .cast<DropdownMenuEntry<String>>(),
+                )),
             const SizedBox(
               height: 16,
             ),
             if (profession != null) ...[
-              Text(
-                'Skills',
-                style: context.styles.body1,
-              ),
-              SizedBox(height: profession != null ? 8 : 16),
-              Wrap(
-                runSpacing: 8,
-                spacing: 9,
-                children: profession!.skills.map((item) {
-                  return ChoiceChip(
-                    label: Text(
-                      item,
-                      style: context.styles.body2,
-                    ),
-                    selected: skills.contains(item),
-                    onSelected: (value) {
-                      setState(() {
-                        skills.contains(item)
-                            ? skills.remove(item)
-                            : skills.add(item);
-                      });
-                      widget.onSkills(skills);
-                    },
-                  );
-                }).toList(),
+              DisplayWidget(
+                label: 'Skills',
+                height: profession != null ? 8 : 16,
+                child: Wrap(
+                  runSpacing: 8,
+                  spacing: 9,
+                  children: profession!.skills.map((item) {
+                    return ChoiceChip(
+                      selectedColor: const Color(0xff007AFF).withOpacity(0.3),
+                      label: Text(
+                        item,
+                        style: context.styles.body,
+                      ),
+                      selected: skills.contains(item),
+                      onSelected: (value) {
+                        setState(() {
+                          skills.contains(item)
+                              ? skills.remove(item)
+                              : skills.add(item);
+                        });
+                        widget.onSkills(skills);
+                      },
+                    );
+                  }).toList(),
+                ),
               ),
               const SizedBox(
                 height: 16,
               )
             ],
-            Text(
-              'About me',
-              style: context.styles.body1,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            SizedBox(
-              height: 300,
-              child: TextField(
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  hintText: fr == null
-                      ? 'Few words about you...'
-                      : fr!.aboutMeFreelancer,
-                ),
+            DisplayWidget(
+              label: 'About me',
+              child: PulseTextField(
+                hintText: fr == null
+                    ? 'Few words about you...'
+                    : fr!.aboutMeFreelancer,
+                controller: widget.aboutController,
                 maxLines: 4,
                 maxLength: 500,
-                controller: widget.aboutController,
               ),
             )
           ],
@@ -345,26 +319,17 @@ class __ClientTabState extends State<_ClientTab> {
       shrinkWrap: true,
       children: [
         const SizedBox(
-          height: 16,
-        ),
-        Text(
-          'About me',
-          style: context.styles.body1,
-        ),
-        const SizedBox(
           height: 8,
         ),
-        SizedBox(
-          height: 300,
-          child: TextField(
-            decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                hintText: client == null
-                    ? 'Few words about you...'
-                    : client!.aboutMeClient),
+        DisplayWidget(
+          label: 'About me',
+          child: PulseTextField(
+            hintText: client == null
+                ? 'Few words about you...'
+                : client!.aboutMeClient,
+            controller: widget.aboutController,
             maxLines: 4,
             maxLength: 500,
-            controller: widget.aboutController,
           ),
         )
       ],

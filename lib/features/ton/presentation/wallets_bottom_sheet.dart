@@ -25,11 +25,11 @@ void showWalletsBottomSheet(BuildContext context, String text) {
               child: StatefulBuilder(builder: (context, state) {
                 return Container(
                   decoration: BoxDecoration(
-                    color: Colors.black,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                     // color: ontext.theme.colorScheme.onTertiary,
                     borderRadius: BorderRadius.circular(20).copyWith(
-                      bottomLeft: null,
-                      bottomRight: null,
+                      bottomLeft: Radius.zero,
+                      bottomRight: Radius.zero,
                     ),
                   ),
                   child: Padding(
@@ -47,7 +47,7 @@ void showWalletsBottomSheet(BuildContext context, String text) {
                               tonState.status == Status.loading
                                   ? 'Connecting...'
                                   : text,
-                              style: context.styles.header2,
+                              style: context.styles.headline,
                             ),
                             const SizedBox(
                               height: 32,
@@ -57,7 +57,7 @@ void showWalletsBottomSheet(BuildContext context, String text) {
                               Center(
                                 child: Text(
                                   'CONNECTED',
-                                  style: context.styles.header2,
+                                  style: context.styles.headline,
                                 ),
                               ),
                             if (tonState.status != Status.loading &&
@@ -142,7 +142,7 @@ class _WalletsDisplay extends StatelessWidget {
             if (!thereAreWallets)
               Text(
                 'Looks like something is wrong. Try again please. Maybe with VPN.',
-                style: context.styles.body2.copyWith(color: Colors.white),
+                style: context.styles.body,
               ),
             if (isThereTg) ...[
               GestureDetector(
@@ -170,7 +170,7 @@ class _WalletsDisplay extends StatelessWidget {
                       Text(
                         'Telegram Wallet',
                         style:
-                            context.styles.body1.copyWith(color: Colors.white),
+                            context.styles.body.copyWith(color: Colors.white),
                       ),
                     ],
                   ),
@@ -247,9 +247,7 @@ class _WalletButton extends StatelessWidget {
                 ),
                 FittedBox(
                   fit: BoxFit.fitWidth,
-                  child: Text(wallet.name,
-                      style:
-                          context.styles.body1.copyWith(color: Colors.white)),
+                  child: Text(wallet.name, style: context.styles.body),
                 )
               ],
             )),
