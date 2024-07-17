@@ -380,7 +380,7 @@ class _AuthorAndMakeProposalState extends State<_AuthorAndMakeProposal> {
           break;
         } else {
           setState(() {
-            didIRespond = true;
+            didIRespond = false;
           });
           break;
         }

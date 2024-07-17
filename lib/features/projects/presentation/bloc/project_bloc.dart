@@ -137,7 +137,11 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
 
   FutureOr<void> _submitProposal(
       ProjectSubmitProposal event, Emitter<ProjectState> emit) async {
+    emit(state.copyWith(status: Status.loading));
     final UserEntity user = userbloc.state.authorizedUser;
+    final proj = event.entity;
+    List<ProposalEntity> props = List.from(proj.proposals ?? []);
+
     final ProposalEntity proposalEntity = ProposalEntity(
       dirId: 0,
       authorId: user.dirId,
@@ -150,13 +154,17 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       collection: DirectusCollections.proposalsCollections,
       data: proposalEntity.toMap(),
     );
+
+    props.add(proposalEntity);
+    final updProj = proj.copyWith(proposals: props);
     List<ProjectEntity> all = List.from(state.available);
     List<ProjectEntity> my = List.from(state.userResponses);
     all.remove(event.entity);
-    my.add(event.entity);
-    emit(state.copyWith(available: all, userResponses: my));
+    my.add(updProj);
+    print(updProj);
+    emit(state.copyWith(
+        available: all, userResponses: my, status: Status.initial));
     navigationService.config.pop();
-    log(raw.toString());
   }
 
   FutureOr<void> _editProject(
