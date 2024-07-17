@@ -106,7 +106,7 @@ class _EditProfileState extends State<EditProfile>
                                 child: Text(
                                   state.connector?.connected ?? false
                                       ? 'Connected with ${state.connector!.wallet?.device!.appName}'
-                                      : "Disconnected",
+                                      : "Disconnected ",
                                   style: context.styles.body.copyWith(
                                       color: state.connector?.connected ?? false
                                           ? Colors.green
