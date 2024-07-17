@@ -172,22 +172,27 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
                               label: 'Project budget',
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SizedBox(
                                     height: 40,
                                     width:
                                         MediaQuery.sizeOf(context).width - 200,
-                                    child: PulseTextField(
-                                      hintText: '',
-                                      controller: amountController,
-                                      inputType: TextInputType.number,
-                                      height: 40,
-                                      showCounter: false,
-                                      maxLength: 150,
-                                      maxLines: 1,
-                                      formatters: [
-                                        FilteringTextInputFormatter.digitsOnly,
-                                      ],
+                                    child: Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: PulseTextField(
+                                        hintText: '',
+                                        controller: amountController,
+                                        inputType: TextInputType.number,
+                                        height: 40,
+                                        showCounter: false,
+                                        maxLength: 10,
+                                        maxLines: 1,
+                                        formatters: [
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(

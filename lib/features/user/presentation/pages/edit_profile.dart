@@ -146,6 +146,9 @@ class _EditProfileState extends State<EditProfile>
                     text: 'Update',
                     action: buttonAction,
                   ),
+                ),
+                const SizedBox(
+                  height: 30,
                 )
               ],
             ),
@@ -292,7 +295,10 @@ class __FreelanceTabState extends State<_FreelanceTab> {
                 maxLines: 4,
                 maxLength: 500,
               ),
-            )
+            ),
+            const SizedBox(
+              height: 50,
+            ),
           ],
         );
       },

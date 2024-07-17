@@ -31,27 +31,30 @@ class PulseTextField extends StatelessWidget {
           decoration: BoxDecoration(
               color: const Color(0xffF2F2F7),
               borderRadius: BorderRadius.circular(10)),
-          child: TextField(
-              inputFormatters: formatters,
-              keyboardType: inputType ?? TextInputType.text,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                hintText: hintText,
-                //  'Im great for this job because...',
-              ),
-              maxLines: maxLines ?? 6,
-              maxLength: maxLength ?? 1000,
-              controller: controller,
-              buildCounter: showCounter ?? true
-                  ? null
-                  : (context,
-                      {required currentLength,
-                      required isFocused,
-                      required maxLength}) {
-                      return const SizedBox.shrink();
-                    }),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 3.0),
+            child: TextField(
+                inputFormatters: formatters,
+                keyboardType: inputType ?? TextInputType.text,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  hintText: hintText,
+                  //  'Im great for this job because...',
+                ),
+                maxLines: maxLines ?? 6,
+                maxLength: maxLength ?? 1000,
+                controller: controller,
+                buildCounter: showCounter ?? true
+                    ? null
+                    : (context,
+                        {required currentLength,
+                        required isFocused,
+                        required maxLength}) {
+                        return const SizedBox.shrink();
+                      }),
+          ),
         ));
   }
 }

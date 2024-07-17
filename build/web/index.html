@@ -22,7 +22,7 @@
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = "3980833160";
+    const serviceWorkerVersion = "1471408507";
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
@@ -43,6 +43,7 @@
       overflow: hidden;
     }
     .scrollable-content {
+      height: 100%;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -50,52 +51,56 @@
 </head>
 <body>
   <div id="flutter_container">
-    <script>
-      // JavaScript код для блокировки свайпов
-      const overflow = 100;
-      document.body.style.overflowY = 'hidden';
-      document.body.style.marginTop = `${overflow}px`;
-      document.body.style.height = window.innerHeight + overflow + "px";
-      document.body.style.paddingBottom = `${overflow}px`;
-      window.scrollTo(0, overflow);
+    <div class="scrollable-content">
+      <!-- Flutter app will be injected here -->
+    </div>
+  </div>
 
-      let ts;
-      const onTouchStart = (e) => {
-        ts = e.touches[0].clientY;
-      }
-      const onTouchMove = (e) => {
-        const scrollableEl = document.querySelector('.scrollable-content');
-        if (scrollableEl) {
-          const scroll = scrollableEl.scrollTop;
-          const te = e.changedTouches[0].clientY;
-          if (scroll <= 0 && ts < te) {
-            e.preventDefault();
-          }
-        } else {
+  <script>
+    // JavaScript код для блокировки свайпов
+    const overflow = 100;
+    document.body.style.overflowY = 'hidden';
+    document.body.style.marginTop = `${overflow}px`;
+    document.body.style.height = window.innerHeight + overflow + "px";
+    document.body.style.paddingBottom = `${overflow}px`;
+    window.scrollTo(0, overflow);
+
+    let ts;
+    const onTouchStart = (e) => {
+      ts = e.touches[0].clientY;
+    }
+    const onTouchMove = (e) => {
+      const scrollableEl = document.querySelector('.scrollable-content');
+      if (scrollableEl) {
+        const scroll = scrollableEl.scrollTop;
+        const te = e.changedTouches[0].clientY;
+        if (scroll <= 0 && ts < te) {
           e.preventDefault();
         }
+      } else {
+        e.preventDefault();
       }
-      document.documentElement.addEventListener('touchstart', onTouchStart, { passive: false });
-      document.documentElement.addEventListener('touchmove', onTouchMove, { passive: false });
-      
-      window.addEventListener('DOMContentLoaded', (event) => {
-        Telegram.WebApp.expand();
-      });
+    }
+    document.documentElement.addEventListener('touchstart', onTouchStart, { passive: false });
+    document.documentElement.addEventListener('touchmove', onTouchMove, { passive: false });
+    
+    window.addEventListener('DOMContentLoaded', (event) => {
+      Telegram.WebApp.expand();
+    });
 
-      window.addEventListener('load', function(ev) {
-        // Download main.dart.js
-        _flutter.loader.loadEntrypoint({
-          serviceWorker: {
-            serviceWorkerVersion: serviceWorkerVersion,
-          },
-          onEntrypointLoaded: function(engineInitializer) {
-            engineInitializer.initializeEngine().then(function(appRunner) {
-              appRunner.runApp();
-            });
-          }
-        });
+    window.addEventListener('load', function(ev) {
+      // Download main.dart.js
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: function(engineInitializer) {
+          engineInitializer.initializeEngine().then(function(appRunner) {
+            appRunner.runApp();
+          });
+        }
       });
-    </script>
-  </div>
+    });
+  </script>
 </body>
 </html>
