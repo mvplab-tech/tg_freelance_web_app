@@ -10,6 +10,7 @@ import 'package:tg_freelance/core/status.dart';
 import 'package:tg_freelance/core/widgets/buttons.dart';
 import 'package:tg_freelance/core/widgets/card.dart';
 import 'package:tg_freelance/core/widgets/text_field.dart';
+import 'package:tg_freelance/core/widgets/wrap.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_state.dart';
@@ -89,9 +90,7 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
                             ),
                             DisplayWidget(
                               label: 'Project Type',
-                              child: Wrap(
-                                runSpacing: 8,
-                                spacing: 8,
+                              child: PulseWrap(
                                 children: ProjectType.values.map((typ) {
                                   return FilterChip(
                                     selectedColor: const Color(0xff007AFF)
@@ -115,10 +114,8 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
                             ),
                             if (type != null) ...[
                               DisplayWidget(
-                                label: 'Required skills',
-                                child: Wrap(
-                                    runSpacing: 8,
-                                    spacing: 8,
+                                  label: 'Required skills',
+                                  child: PulseWrap(
                                     children: type!.skills.map((skill) {
                                       return FilterChip(
                                         selectedColor: const Color(0xff007AFF)
@@ -136,17 +133,15 @@ class _CreateProjectState extends State<CreateProject> with NewProjectMixin {
                                           });
                                         },
                                       );
-                                    }).toList()),
-                              ),
+                                    }).toList(),
+                                  )),
                               const SizedBox(
                                 height: 16,
                               ),
                             ],
                             DisplayWidget(
                               label: 'Required exprtise level',
-                              child: Wrap(
-                                runSpacing: 8,
-                                spacing: 8,
+                              child: PulseWrap(
                                 children: ExpertiseLevel.values.map((exp) {
                                   return FilterChip(
                                     selectedColor: const Color(0xff007AFF)

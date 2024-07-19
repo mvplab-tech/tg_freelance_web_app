@@ -50,8 +50,8 @@ class _PulseButtonState extends State<PulseButton> {
                     color: widget.enabled ? Colors.white : Colors.black26),
               )
             : const CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.black,
+                strokeWidth: 3,
+                color: Colors.white,
               ),
       ),
     );

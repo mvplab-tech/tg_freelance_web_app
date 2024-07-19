@@ -5,6 +5,7 @@ import 'package:tg_freelance/core/router/passing_datas.dart';
 import 'package:tg_freelance/core/services/directus/directus_service_impl.dart';
 import 'package:tg_freelance/core/widgets/buttons.dart';
 import 'package:tg_freelance/core/widgets/card.dart';
+import 'package:tg_freelance/core/widgets/wrap.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/projects/domain/entities/proposal_entity.dart';
 import 'package:tg_freelance/features/projects/presentation/pages/project_page/project_page.dart';
@@ -224,14 +225,10 @@ class SkillsDisplay extends StatelessWidget {
           const SizedBox(
             height: 16,
           ),
-          Wrap(
-            spacing: 4,
-            children: [
-              ...skills.map((skill) {
-                return Chip(label: Text(skill));
-              }).toList()
-            ],
-          ),
+          PulseWrap(
+              children: skills.map((skill) {
+            return Chip(label: Text(skill));
+          }).toList()),
         ],
       ),
     );

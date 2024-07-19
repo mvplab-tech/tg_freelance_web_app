@@ -150,7 +150,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       date: DateTime.now(),
       projectId: int.parse(event.entity.dirId),
     );
-    final raw = await directus.createOne(
+    await directus.createOne(
       collection: DirectusCollections.proposalsCollections,
       data: proposalEntity.toMap(),
     );
@@ -161,7 +161,6 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     List<ProjectEntity> my = List.from(state.userResponses);
     all.remove(event.entity);
     my.add(updProj);
-    print(updProj);
     emit(state.copyWith(
         available: all, userResponses: my, status: Status.initial));
     navigationService.config.pop();

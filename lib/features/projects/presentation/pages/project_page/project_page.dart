@@ -11,6 +11,7 @@ import 'package:tg_freelance/core/status.dart';
 import 'package:tg_freelance/core/widgets/buttons.dart';
 import 'package:tg_freelance/core/widgets/card.dart';
 import 'package:tg_freelance/core/widgets/text_field.dart';
+import 'package:tg_freelance/core/widgets/wrap.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/projects/domain/entities/proposal_entity.dart';
 import 'package:tg_freelance/features/projects/presentation/bloc/project_bloc.dart';
@@ -95,14 +96,11 @@ class _MainData extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
-          Wrap(
-            spacing: 4,
-            children: [
-              ...project.skills.map((skill) {
+          PulseWrap(
+              alignment: WrapAlignment.center,
+              children: project.skills.map((skill) {
                 return Chip(label: Text(skill));
-              }).toList()
-            ],
-          ),
+              }).toList()),
           const SizedBox(
             height: 8,
           ),
@@ -525,7 +523,7 @@ class _AuthorAndMakeProposalState extends State<_AuthorAndMakeProposal> {
                   ),
                 ]
               ],
-              if (!userbloc.state.isFreelancerFilled) ...[
+              if (!userbloc.state.isFreelancerFilled && !didIRespond) ...[
                 const SizedBox(
                   height: 8,
                 ),
@@ -538,7 +536,7 @@ class _AuthorAndMakeProposalState extends State<_AuthorAndMakeProposal> {
                   ),
                 )
               ],
-              if (userbloc.state.isFreelancerFilled)
+              if (userbloc.state.isFreelancerFilled && !didIRespond)
                 BlocBuilder<TonBloc, TonState>(
                   bloc: tonBloc,
                   builder: (context, state) {
@@ -552,7 +550,7 @@ class _AuthorAndMakeProposalState extends State<_AuthorAndMakeProposal> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Before creating new project, you should be connected to TON. Please, tap below.',
+                            'Before making any proposals, you should be connected to TON. Please, tap below.',
                             style: context.styles.body,
                             textAlign: TextAlign.center,
                           ),

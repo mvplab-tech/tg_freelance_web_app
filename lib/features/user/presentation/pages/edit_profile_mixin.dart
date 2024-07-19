@@ -18,6 +18,9 @@ mixin EditProfileMixin on State<EditProfile> {
         setState(() {});
       });
     aboutFreelancerController = TextEditingController();
+    profession = user.freelancerProfile?.occupation;
+    expertiseLevel = user.freelancerProfile?.expertiseLevel;
+    skills = user.freelancerProfile?.skills ?? [];
     super.initState();
   }
 
@@ -26,6 +29,7 @@ mixin EditProfileMixin on State<EditProfile> {
     nameController.dispose();
     aboutClientController.dispose();
     aboutFreelancerController.dispose();
+
     super.dispose();
   }
 
@@ -110,11 +114,9 @@ mixin EditProfileMixin on State<EditProfile> {
         client: ClientProfile(
           aboutMeClient: aboutClientController.text.isNotEmpty
               ? aboutClientController.text.trim()
-              : user.clientProfile?.aboutMeClient ?? '',
+              : user.clientProfile?.aboutMeClient.trim() ?? '',
         ),
       ),
     );
-    // print(
-    //     'name: ${nameController.text}, about freelancer: ${aboutFreelancerController.text}, profession: $profession, expertise: $expertiseLevel, skills: $skills');
   }
 }

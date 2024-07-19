@@ -6,6 +6,7 @@ import 'package:tg_freelance/core/status.dart';
 import 'package:tg_freelance/core/widgets/buttons.dart';
 import 'package:tg_freelance/core/widgets/card.dart';
 import 'package:tg_freelance/core/widgets/text_field.dart';
+import 'package:tg_freelance/core/widgets/wrap.dart';
 import 'package:tg_freelance/features/projects/domain/entities/project_entity.dart';
 import 'package:tg_freelance/features/ton/presentation/bloc/ton_bloc.dart';
 import 'package:tg_freelance/features/ton/presentation/bloc/ton_state.dart';
@@ -22,18 +23,17 @@ class EditProfile extends StatefulWidget {
   State<EditProfile> createState() => _EditProfileState();
 }
 
-class _EditProfileState extends State<EditProfile>
-    with SingleTickerProviderStateMixin, EditProfileMixin {
-  late TabController tabController;
+class _EditProfileState extends State<EditProfile> with EditProfileMixin {
+  // late TabController tabController;
   @override
   void initState() {
-    tabController = TabController(length: 2, vsync: this);
+    // tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
   @override
   void dispose() {
-    tabController.dispose();
+    // tabController.dispose();
     super.dispose();
   }
 
@@ -54,23 +54,8 @@ class _EditProfileState extends State<EditProfile>
         builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: ListView(
               children: [
-                TabBar(
-                  controller: tabController,
-                  tabs: const [
-                    Tab(
-                      text: 'as Freelancer',
-                    ),
-                    Tab(
-                      text: 'as client',
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
                 DisplayWidget(
                   label: 'My name',
                   child: PulseTextField(
@@ -118,25 +103,18 @@ class _EditProfileState extends State<EditProfile>
                         );
                       },
                     )),
-                const SizedBox(
-                  height: 16,
+                _FreelancerProfile(
+                  state: state,
+                  aboutController: aboutFreelancerController,
+                  onProfession: onProfession,
+                  onExpertise: onExpertise,
+                  onSkills: onSkills,
                 ),
-                Expanded(
-                  child: TabBarView(
-                    controller: tabController,
-                    children: [
-                      _FreelanceTab(
-                        state: state,
-                        aboutController: aboutFreelancerController,
-                        onProfession: onProfession,
-                        onExpertise: onExpertise,
-                        onSkills: onSkills,
-                      ),
-                      _ClientTab(
-                        aboutController: aboutClientController,
-                      ),
-                    ],
-                  ),
+                _ClientTab(
+                  aboutController: aboutClientController,
+                ),
+                const SizedBox(
+                  height: 50,
                 ),
                 SizedBox(
                   height: 50,
@@ -159,7 +137,7 @@ class _EditProfileState extends State<EditProfile>
   }
 }
 
-class _FreelanceTab extends StatefulWidget {
+class _FreelancerProfile extends StatefulWidget {
   final UserState state;
 
   final TextEditingController aboutController;
@@ -167,7 +145,7 @@ class _FreelanceTab extends StatefulWidget {
   final Function(ExpertiseLevel) onExpertise;
   final Function(List<String>) onSkills;
 
-  const _FreelanceTab({
+  const _FreelancerProfile({
     Key? key,
     required this.state,
     required this.aboutController,
@@ -176,10 +154,10 @@ class _FreelanceTab extends StatefulWidget {
     required this.onSkills,
   }) : super(key: key);
   @override
-  State<_FreelanceTab> createState() => __FreelanceTabState();
+  State<_FreelancerProfile> createState() => __FreelancerProfileState();
 }
 
-class __FreelanceTabState extends State<_FreelanceTab> {
+class __FreelancerProfileState extends State<_FreelancerProfile> {
   FreelancerProfile? fr = userbloc.state.authorizedUser.freelancerProfile;
 
   ProjectType? profession;
@@ -199,9 +177,19 @@ class __FreelanceTabState extends State<_FreelanceTab> {
     return BlocBuilder<UserBloc, UserState>(
       bloc: userbloc,
       builder: (context, state) {
-        return ListView(
-          shrinkWrap: true,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 16,
+            ),
+            Text(
+              'Freelancer profile',
+              style: context.styles.title3,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
             DisplayWidget(
                 label: 'I am',
                 child: DropdownMenu(
@@ -258,9 +246,7 @@ class __FreelanceTabState extends State<_FreelanceTab> {
               DisplayWidget(
                 label: 'Skills',
                 height: profession != null ? 8 : 16,
-                child: Wrap(
-                  runSpacing: 8,
-                  spacing: 9,
+                child: PulseWrap(
                   children: profession!.skills.map((item) {
                     return ChoiceChip(
                       selectedColor: const Color(0xff007AFF).withOpacity(0.3),
@@ -286,7 +272,7 @@ class __FreelanceTabState extends State<_FreelanceTab> {
               )
             ],
             DisplayWidget(
-              label: 'About me',
+              label: 'About me as freelancer',
               child: PulseTextField(
                 hintText: fr == null
                     ? 'Few words about you...'
@@ -296,9 +282,9 @@ class __FreelanceTabState extends State<_FreelanceTab> {
                 maxLength: 500,
               ),
             ),
-            const SizedBox(
-              height: 50,
-            ),
+            // const SizedBox(
+            //   height: 16,
+            // ),
           ],
         );
       },
@@ -325,10 +311,17 @@ class __ClientTabState extends State<_ClientTab> {
       shrinkWrap: true,
       children: [
         const SizedBox(
+          height: 16,
+        ),
+        Text(
+          'Client profile',
+          style: context.styles.title3,
+        ),
+        const SizedBox(
           height: 8,
         ),
         DisplayWidget(
-          label: 'About me',
+          label: 'About me as client',
           child: PulseTextField(
             hintText: client == null
                 ? 'Few words about you...'
